@@ -8,9 +8,10 @@ module.exports = {
     root: true,
     ignorePatterns: ['**/dist/**'],
     env: {
-        browser: true,
-        node: true,
-        es2021: true,
+        'browser': true,
+        'node': true,
+        'es2021': true,
+        'vue/setup-compiler-macros': true,
     },
     parserOptions: {
         ecmaVersion: 2020,
