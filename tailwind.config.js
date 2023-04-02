@@ -12,6 +12,7 @@ module.exports = {
         colors: {
             'primary-color': '#5D31FE',
             'white': '#ffffff',
+            'gray': '#969696',
         },
         spacing: {
             1: '16px',
