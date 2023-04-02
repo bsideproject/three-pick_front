@@ -1,14 +1,8 @@
-<script setup lang="ts">
-import {useCounterStore} from './stores/CountStore';
-
-const store = useCounterStore();
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <div>
-        <input type="button" value="increment" @click="store.increment()" />
-        {{ store.count }}
-        {{ store.doubleCount }}
+        <basic-button>응애</basic-button>
         <h1 class="text-3xl font-bold underline">Hello world!</h1>
     </div>
 </template>
