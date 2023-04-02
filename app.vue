@@ -9,6 +9,7 @@ const store = useCounterStore();
         <input type="button" value="increment" @click="store.increment()" />
         {{ store.count }}
         {{ store.doubleCount }}
+        <h1 class="text-3xl font-bold underline">Hello world!</h1>
     </div>
 </template>
 
