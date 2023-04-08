@@ -15,4 +15,7 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+    imports: {
+        dirs: ['composables/**'],
+    },
 });
