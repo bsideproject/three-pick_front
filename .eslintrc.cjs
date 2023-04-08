@@ -65,6 +65,12 @@ module.exports = {
                 },
             },
         ],
+        'vue/multi-word-component-names': [
+            'error',
+            {
+                ignores: ['default', 'index', 'Header'],
+            },
+        ],
     },
     overrides: [
         {
