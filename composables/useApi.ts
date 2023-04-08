@@ -1,7 +1,13 @@
-const baseURL = 'https://01.101.219.14:8080';
+import type {UseFetchOptions} from 'nuxt/app';
 
-export default (url: string) => {
+export const baseURL = 'https://01.101.219.14:8080';
+
+/** useFetch
+ * https://nuxt.com/docs/api/composables/use-fetch
+ */
+export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
     return useFetch(url, {
+        ...options,
         baseURL: baseURL,
         /** interceptors
          *
