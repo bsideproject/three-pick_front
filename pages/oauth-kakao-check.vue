@@ -14,7 +14,7 @@ onMounted(() => {
     try {
         setAccessToken(auth as string);
         setRefreshToken(refresh as string);
-        router.push('/login');
+        router.push('/');
     } catch (e) {
         console.error(e);
     }

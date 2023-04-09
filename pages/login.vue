@@ -1,18 +1,10 @@
 <script setup lang="ts">
-import {onMounted} from 'vue';
-
 import KakaoLogin from '~/assets/svg/KakaoLoginButton.svg?component';
 import ThreePick from '~/assets/svg/ThreePick.svg?component';
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
 import {baseURL} from '~/composables';
-import {useAuthStore} from '~/stores/AuthStore';
 
 const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
-
-onMounted(() => {
-    const {accessToken} = useAuthStore();
-    console.log('로그인 완료.', accessToken);
-});
 </script>
 <template>
     <div class="flex flex-col justify-center items-center mt-[112px]">
