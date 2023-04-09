@@ -13,9 +13,11 @@ module.exports = {
             'primary-color': '#5D31FE',
             'white': '#ffffff',
             'gray': '#969696',
+            'hr': '#C8C8C8',
         },
         spacing: {
             1: '16px',
+            2: '20px',
             // 1: '8px',
             // 2: '12px',
             // 3: '16px',
@@ -27,6 +29,7 @@ module.exports = {
             none: '0',
             DEFAULT: '6px',
         },
+
         extend: {},
     },
     plugins: [],
