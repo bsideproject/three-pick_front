@@ -10,24 +10,19 @@ module.exports = {
     ],
     theme: {
         colors: {
-            'primary-color': '#5D31FE',
-            'white': '#ffffff',
-            'gray': '#969696',
-            'hr': '#C8C8C8',
+            purple: '#5D31FE',
+            orange: '#FF5416',
+            green: '#DEF048',
+            black: '#222222',
+            white: '#FFFFFF',
+            gray: '#969696',
+            hr: '#C8C8C8',
+            error: '#E83459',
         },
-        spacing: {
-            1: '16px',
-            2: '20px',
-            // 1: '8px',
-            // 2: '12px',
-            // 3: '16px',
-            // 4: '24px',
-            // 5: '32px',
-            // 6: '48px',
-        },
+        //spacing: default (https://tailwindcss.com/docs/customizing-spacing#default-spacing-scale)
         borderRadius: {
             none: '0',
-            DEFAULT: '6px',
+            DEFAULT: '16px',
         },
 
         extend: {},
