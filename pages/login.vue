@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {onMounted} from 'vue';
 
-import KakaoLogin from '../assets/svg/KakaoLoginButton.svg?component';
-import ThreePick from '../assets/svg/ThreePick.svg?component';
-import ThreePickLogo from '../assets/svg/ThreePickLogo.svg?component';
-
+import KakaoLogin from '~/assets/svg/KakaoLoginButton.svg?component';
+import ThreePick from '~/assets/svg/ThreePick.svg?component';
+import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
+import {baseURL} from '~/composables';
 import {useAuthStore} from '~/stores/AuthStore';
 
-const kakaoUrl = `http://101.101.219.14:8080/oauth2/authorization/kakao`;
+const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
 
 onMounted(() => {
     const {accessToken} = useAuthStore();
@@ -15,9 +15,9 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="test">
+    <div class="flex flex-col justify-center items-center mt-[112px]">
         <div class="max-w-[484px]">
-            <section class="Logo">
+            <section class="mb-[95px]">
                 <ThreePickLogo />
             </section>
             <header class="text-2xl font-bold mb-2 text-center">
@@ -33,16 +33,4 @@ onMounted(() => {
     </div>
 </template>
 
-<style lang="scss" scoped>
-.test {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 112px;
-}
-
-.Logo {
-    margin-bottom: 95px;
-}
-</style>
+<style lang="scss" scoped></style>
