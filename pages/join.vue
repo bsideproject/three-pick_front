@@ -91,6 +91,7 @@ const onGetVerifyCode = (retry = false) => {
             />
             <basic-button
                 v-if="!isEmailCodeInputVisible"
+                :theme="'primary'"
                 class="mt-[16px] mb-[32px]"
                 :disabled="emailVerifyButtonStatus"
                 @onClick="getVerifyCode(userEmailInput)"
@@ -100,7 +101,7 @@ const onGetVerifyCode = (retry = false) => {
                 v-else
                 class="mt-4 mb-8 h-[176px] rounded bg-[#F0F0F0] p-6"
             >
-                <h3 class="text-sm mb-4 text-purple font-semibold">
+                <h3 class="text-sm mb-4 text-purple7 font-semibold">
                     이메일로 전송된 확인코드 6자리를 입력해 주세요.
                 </h3>
                 <div class="flex justify-between items-center">
@@ -112,9 +113,11 @@ const onGetVerifyCode = (retry = false) => {
                         @input.self="onInputVerifyCode"
                     />
                     <basic-button
+                        :theme="'primary'"
                         class="ml-2 w-[88px]"
                         @onClick="onGetVerifyCode"
-                        >인증하기</basic-button
+                    >
+                        인증하기</basic-button
                     >
                 </div>
                 <div class="text-xs text-gray mt-[10px]">
@@ -154,12 +157,15 @@ const onGetVerifyCode = (retry = false) => {
             <section class="flex justify-between my-[20px]">
                 이용약관 컴포넌트
             </section>
-            <basic-button class="mb-[32px]" :disabled="!isEmailVerified"
+            <basic-button
+                :theme="'primary'"
+                class="mb-[32px]"
+                :disabled="!isEmailVerified"
                 >회원가입하기</basic-button
             >
             <div class="flex justify-center font-medium text-sm text-gray">
                 이미 계정이 있으신가요?
-                <NuxtLink to="/login" class="ml-[10px] text-purple underline"
+                <NuxtLink to="/login" class="ml-[10px] text-purple7 underline"
                     >로그인하기</NuxtLink
                 >
             </div>

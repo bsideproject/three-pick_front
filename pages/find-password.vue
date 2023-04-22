@@ -60,7 +60,10 @@ export default defineComponent({
                 @input.self="test"
                 @blur="checkEmailFormat"
             />
-            <basic-button class="mt-[20px]" :disabled="!loginButtonActivated"
+            <basic-button
+                :theme="'primary'"
+                class="mt-[20px]"
+                :disabled="!loginButtonActivated"
                 >임시 비밀번호 발급받기</basic-button
             >
         </div>

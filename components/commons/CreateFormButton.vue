@@ -10,7 +10,7 @@ const AsyncForm = defineAsyncComponent(
     () => import(`~/components/${props.formType}.vue`),
 );
 
-const showButton = ref(true);
+const showButton = ref(false);
 
 const onClickButton = () => {
     emit('onClick');
@@ -20,7 +20,7 @@ const onClickButton = () => {
 
 <template>
     <template v-if="showButton">
-        <basic-button class="h-20" @onClick="onClickButton">
+        <basic-button :theme="'primary'" class="h-20" @onClick="onClickButton">
             <slot />
         </basic-button>
     </template>

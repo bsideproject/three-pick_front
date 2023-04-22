@@ -68,7 +68,10 @@ export default defineComponent({
                 :required="true"
                 @input.self="testPassword"
             />
-            <basic-button class="mt-[20px]" :disabled="!loginButtonActivated"
+            <basic-button
+                :theme="'primary'"
+                class="mt-[20px]"
+                :disabled="!loginButtonActivated"
                 >로그인하기</basic-button
             >
             <section class="flex justify-between mt-[20px]">
