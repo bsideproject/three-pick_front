@@ -2,7 +2,7 @@
 import {ref} from 'vue';
 
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
-import {useApi} from '~/composables';
+import {joinApi} from '~/apis';
 
 const userEmailInput = ref<string>('');
 const userPasswordInput = ref<string>('');
@@ -19,6 +19,7 @@ const isEmailCodeInputVisible = ref<boolean>(false);
 const verifyCode = ref<string>('');
 
 const isEmailVerified = ref<boolean>(false);
+const isIncorrectVerifyCode = ref<boolean>(false);
 
 const onInputEmail = (params: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,38 +51,17 @@ const onInputNickName = (params: string) => {
         nicknameRegex.test(params) && userNicknameInput.value.length > 0;
 };
 
-const onGetVerifyCode = async (retry = false) => {
+const onInputVerifyCode = (params: string) => {
+    verifyCode.value = params;
+};
+
+const {getVerifyCode, validateVerifyCode} = joinApi;
+
+const onGetVerifyCode = (retry = false) => {
     if (!retry) {
         isEmailCodeInputVisible.value = !isEmailCodeInputVisible.value;
     }
-
-    const {data, pending, error, refresh} = await useApi(
-        `/api/accounts/${userEmailInput.value}/auth`,
-        {
-            method: 'POST',
-        },
-    );
-    console.log('data', data);
-};
-
-const onValidateVerifyCode = async () => {
-    const {data} = await useApi(
-        `/api/accounts/${userEmailInput.value}/auth-check`,
-        {
-            method: 'GET',
-            query: {
-                code: verifyCode.value,
-            },
-        },
-    );
-
-    if (data.value) {
-        isEmailVerified.value = true;
-    }
-};
-
-const onInputVerifyCode = (params: string) => {
-    verifyCode.value = params;
+    validateVerifyCode(userEmailInput.value, verifyCode.value);
 };
 </script>
 <template>
@@ -113,7 +93,7 @@ const onInputVerifyCode = (params: string) => {
                 v-if="!isEmailCodeInputVisible"
                 class="mt-[16px] mb-[32px]"
                 :disabled="emailVerifyButtonStatus"
-                @onClick="onGetVerifyCode"
+                @onClick="getVerifyCode(userEmailInput)"
                 >이메일 인증하기</basic-button
             >
             <section
@@ -133,7 +113,7 @@ const onInputVerifyCode = (params: string) => {
                     />
                     <basic-button
                         class="ml-2 w-[88px]"
-                        @onClick="onValidateVerifyCode"
+                        @onClick="onGetVerifyCode"
                         >인증하기</basic-button
                     >
                 </div>
