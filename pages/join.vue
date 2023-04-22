@@ -1,84 +1,58 @@
-<script lang="ts">
-import {defineComponent, computed, ref} from 'vue';
+<script setup lang="ts">
+import {ref} from 'vue';
 
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
-import {baseURL} from '~/composables';
 
-const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
+const userEmailInput = ref<string>('');
+const userPasswordInput = ref<string>('');
+const userPasswordCheckInput = ref<string>('');
+const userNicknameInput = ref<string>('');
 
-export default defineComponent({
-    name: 'LoginPage',
-    components: {ThreePickLogo},
-    setup() {
-        const userEmailInput = ref<string>('');
-        const userPasswordInput = ref<string>('');
-        const userPasswordCheckInput = ref<string>('');
-        const userNicknameInput = ref<string>('');
+const emailVerifyButtonStatus = ref<boolean>(true);
+const emailInputValidationStatus = ref<boolean>(true);
+const passwordInputValidationStatus = ref<boolean>(true);
+const passwordCheckValidationStatus = ref<boolean>(true);
+const nicknameCheckValidationStatus = ref<boolean>(true);
 
-        const emailVerifyButtonStatus = ref<boolean>(true);
-        const emailInputValidationStatus = ref<boolean>(true);
-        const passwordInputValidationStatus = ref<boolean>(true);
-        const passwordCheckValidationStatus = ref<boolean>(true);
-        const nicknameCheckValidationStatus = ref<boolean>(true);
+const isEmailCodeInputVisible = ref<boolean>(false);
+const verifyCode = ref<string>('');
 
-        const onInputEmail = (params: string) => {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            userEmailInput.value = params;
-            emailVerifyButtonStatus.value = !emailRegex.test(params);
-            emailInputValidationStatus.value =
-                emailRegex.test(params) && userEmailInput.value.length > 0;
-        };
+const onInputEmail = (params: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    userEmailInput.value = params;
+    emailVerifyButtonStatus.value = !emailRegex.test(params);
+    emailInputValidationStatus.value =
+        emailRegex.test(params) && userEmailInput.value.length > 0;
+};
 
-        const onInputPassword = (params: string) => {
-            const passwordRegex =
-                /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,20}$/;
-            userPasswordInput.value = params;
-            passwordInputValidationStatus.value =
-                passwordRegex.test(params) &&
-                userPasswordInput.value.length > 0;
-        };
+const onInputPassword = (params: string) => {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,20}$/;
+    userPasswordInput.value = params;
+    passwordInputValidationStatus.value =
+        passwordRegex.test(params) && userPasswordInput.value.length > 0;
+};
 
-        const onInputPasswordCheck = (params: string) => {
-            userPasswordCheckInput.value = params;
-            passwordCheckValidationStatus.value =
-                userPasswordCheckInput.value.length > 0 &&
-                userPasswordInput.value === userPasswordCheckInput.value;
-        };
+const onInputPasswordCheck = (params: string) => {
+    userPasswordCheckInput.value = params;
+    passwordCheckValidationStatus.value =
+        userPasswordCheckInput.value.length > 0 &&
+        userPasswordInput.value === userPasswordCheckInput.value;
+};
 
-        const onInputNickName = (params: string) => {
-            const nicknameRegex =
-                /^(?!.*[\s!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?])[^\s]{2,16}$/;
-            userNicknameInput.value = params;
-            nicknameCheckValidationStatus.value =
-                nicknameRegex.test(params) &&
-                userNicknameInput.value.length > 0;
-        };
+const onInputNickName = (params: string) => {
+    const nicknameRegex =
+        /^(?!.*[\s!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?])[^\s]{2,16}$/;
+    userNicknameInput.value = params;
+    nicknameCheckValidationStatus.value =
+        nicknameRegex.test(params) && userNicknameInput.value.length > 0;
+};
 
-        const loginButtonActivated = computed(
-            () =>
-                userEmailInput.value.length > 0 &&
-                userPasswordInput.value.length > 0,
-        );
+const onClickVerifyEmail = () =>
+    (isEmailCodeInputVisible.value = !isEmailCodeInputVisible.value);
 
-        return {
-            emailInputValidationStatus,
-            passwordInputValidationStatus,
-            passwordCheckValidationStatus,
-            nicknameCheckValidationStatus,
-            kakaoUrl,
-            userEmailInput,
-            userPasswordInput,
-            userPasswordCheckInput,
-            userNicknameInput,
-            emailVerifyButtonStatus,
-            loginButtonActivated,
-            onInputEmail,
-            onInputPassword,
-            onInputPasswordCheck,
-            onInputNickName,
-        };
-    },
-});
+const onInputVerifyCode = (params: string) => {
+    verifyCode.value = params;
+};
 </script>
 <template>
     <div class="flex flex-col justify-center items-center mt-[112px]">
@@ -95,20 +69,47 @@ export default defineComponent({
                     은 필수 입력입니다.
                 </div>
             </div>
-            <horizontal-rule class="text-gray pt-[24px] pb-[32px]" />
+            <horizontal-rule class="text-hr pt-6 pb-[32px]" />
             <basic-input
                 v-model="userEmailInput"
                 :value="userEmailInput"
                 :required="true"
                 variant="email"
                 :validationState="emailInputValidationStatus ? '' : 'error'"
+                :isDisabled="isEmailCodeInputVisible"
                 @input.self="onInputEmail"
             />
             <basic-button
+                v-if="!isEmailCodeInputVisible"
                 class="mt-[16px] mb-[32px]"
                 :disabled="emailVerifyButtonStatus"
+                @onClick="onClickVerifyEmail"
                 >이메일 인증하기</basic-button
             >
+            <section
+                v-else
+                class="mt-4 mb-8 h-[176px] rounded bg-[#F0F0F0] p-6"
+            >
+                <h3 class="text-sm mb-4 text-purple font-semibold">
+                    이메일로 전송된 확인코드 6자리를 입력해 주세요.
+                </h3>
+                <div class="flex justify-between items-center">
+                    <basic-input
+                        v-model="verifyCode"
+                        :value="verifyCode"
+                        class="w-full !h-12"
+                        variant="text"
+                        @input.self="onInputVerifyCode"
+                    />
+                    <basic-button class="ml-2 w-[88px]">인증하기</basic-button>
+                </div>
+                <div class="text-xs text-gray mt-[10px]">
+                    확인코드는 최대 10분간만 유효해요.
+                </div>
+                <div class="font-medium text-xs underline mt-4">
+                    이메일 재전송하기
+                </div>
+            </section>
             <basic-input
                 variant="password"
                 :value="userPasswordInput"
@@ -150,5 +151,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .input-margin {
     margin-top: 32px;
+}
+
+.test {
+    border: 1px solid red;
 }
 </style>
