@@ -14,7 +14,7 @@ defineProps({
      */
     variant: {
         type: String,
-        default: 'email',
+        default: null,
     },
     /**
      * Input 필수 상태
@@ -37,6 +37,22 @@ defineProps({
     isDisabled: {
         type: Boolean,
         default: false,
+    },
+    /**
+     *
+     */
+    placeholder: {
+        type: String,
+        required: false,
+        default: null,
+    },
+    /**
+     *
+     */
+    title: {
+        type: String,
+        required: false,
+        default: null,
     },
 });
 
@@ -134,25 +150,26 @@ const onFocus = (event: FocusEvent): void => {
 <template>
     <div>
         <h3
-            v-if="inputTitle[variant]"
+            v-if="variant && inputTitle[variant]"
             :class="{
                 'after:content-[\'*\'] after:relative after:text-error after:left-[1px] after:top-[1.5px]':
                     required,
             }"
             class="text-sm mb-[10px]"
         >
-            {{ inputTitle[variant] }}
+            {{ title ?? inputTitle[variant] }}
         </h3>
         <input
             v-bind="$attrs"
             :type="refinedVariant(variant)"
             :class="{
+                'border-gray': !isFocused,
                 'border-purple': isFocused,
                 '!border-error': validationState === 'error',
                 'text-gray bg-[#E1E1E1] border-none': isDisabled,
             }"
             class="border-[1px] rounded-[6px] w-[100%] p-[16px] focus:outline-none mb-0"
-            :placeholder="placeholders[variant]"
+            :placeholder="placeholder ?? placeholders[variant]"
             :value="value"
             :disabled="isDisabled"
             @input="onInput"
