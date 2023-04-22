@@ -2,6 +2,7 @@
 import {ref} from 'vue';
 
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
+import {joinApi} from '~/apis';
 
 const userEmailInput = ref<string>('');
 const userPasswordInput = ref<string>('');
@@ -16,6 +17,9 @@ const nicknameCheckValidationStatus = ref<boolean>(true);
 
 const isEmailCodeInputVisible = ref<boolean>(false);
 const verifyCode = ref<string>('');
+
+const isEmailVerified = ref<boolean>(false);
+const isIncorrectVerifyCode = ref<boolean>(false);
 
 const onInputEmail = (params: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,11 +51,17 @@ const onInputNickName = (params: string) => {
         nicknameRegex.test(params) && userNicknameInput.value.length > 0;
 };
 
-const onClickVerifyEmail = () =>
-    (isEmailCodeInputVisible.value = !isEmailCodeInputVisible.value);
-
 const onInputVerifyCode = (params: string) => {
     verifyCode.value = params;
+};
+
+const {getVerifyCode, validateVerifyCode} = joinApi;
+
+const onGetVerifyCode = (retry = false) => {
+    if (!retry) {
+        isEmailCodeInputVisible.value = !isEmailCodeInputVisible.value;
+    }
+    validateVerifyCode(userEmailInput.value, verifyCode.value);
 };
 </script>
 <template>
@@ -83,7 +93,7 @@ const onInputVerifyCode = (params: string) => {
                 v-if="!isEmailCodeInputVisible"
                 class="mt-[16px] mb-[32px]"
                 :disabled="emailVerifyButtonStatus"
-                @onClick="onClickVerifyEmail"
+                @onClick="getVerifyCode(userEmailInput)"
                 >이메일 인증하기</basic-button
             >
             <section
@@ -101,12 +111,19 @@ const onInputVerifyCode = (params: string) => {
                         variant="text"
                         @input.self="onInputVerifyCode"
                     />
-                    <basic-button class="ml-2 w-[88px]">인증하기</basic-button>
+                    <basic-button
+                        class="ml-2 w-[88px]"
+                        @onClick="onGetVerifyCode"
+                        >인증하기</basic-button
+                    >
                 </div>
                 <div class="text-xs text-gray mt-[10px]">
                     확인코드는 최대 10분간만 유효해요.
                 </div>
-                <div class="font-medium text-xs underline mt-4">
+                <div
+                    class="font-medium text-xs underline mt-4 cursor-pointer"
+                    @click="() => onGetVerifyCode(true)"
+                >
                     이메일 재전송하기
                 </div>
             </section>
@@ -137,7 +154,9 @@ const onInputVerifyCode = (params: string) => {
             <section class="flex justify-between my-[20px]">
                 이용약관 컴포넌트
             </section>
-            <basic-button class="mb-[32px]">회원가입하기</basic-button>
+            <basic-button class="mb-[32px]" :disabled="!isEmailVerified"
+                >회원가입하기</basic-button
+            >
             <div class="flex justify-center font-medium text-sm text-gray">
                 이미 계정이 있으신가요?
                 <NuxtLink to="/login" class="ml-[10px] text-purple underline"

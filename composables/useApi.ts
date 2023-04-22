@@ -1,6 +1,6 @@
 import type {UseFetchOptions} from 'nuxt/app';
 
-export const baseURL = 'https://10.101.219.14:8080';
+export const baseURL = 'http://101.101.219.14:8080';
 
 /** useFetch
  * https://nuxt.com/docs/api/composables/use-fetch

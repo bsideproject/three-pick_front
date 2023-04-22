@@ -1,7 +1,4 @@
 <script setup lang="ts">
-const props = defineProps({
-    foo: String,
-});
 const emit = defineEmits(['onClick']);
 </script>
 
