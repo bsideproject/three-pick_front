@@ -2,7 +2,7 @@
 
 <template>
     <button
-        class="bg-primary-color text-white p-1 h-48 rounded w-full disabled:bg-gray"
+        class="bg-purple text-white p-1 h-[50px] rounded-[6px] w-full disabled:bg-gray"
     >
         <slot />
     </button>

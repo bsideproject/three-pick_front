@@ -10,7 +10,7 @@ module.exports = {
     ],
     theme: {
         colors: {
-            purple: '#5D31FE',
+            purple: '#5d31fe',
             orange: '#FF5416',
             green: '#DEF048',
             black: '#222222',

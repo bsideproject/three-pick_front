@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {loginApi} from 'apis';
+import {loginApi} from '~/apis';
 
 const {data, pending, error, refresh} = await loginApi();
 </script>
