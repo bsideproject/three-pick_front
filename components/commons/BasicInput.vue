@@ -64,6 +64,21 @@ const breadcumbText: Record<string, string> = {
         '닉네임은 2자~ 16자까지 입력 가능하며, 특수문자나 공백은 사용이 불가능해요.',
 };
 
+/**
+ *
+ * @param props
+ * input의 type을 매핑하는 객체가 있어, 커스텀하여 사용할 수 있도록 하였습니다.
+ */
+const refinedVariant = (props: string) => {
+    const variantMapper: Record<string, string> = {
+        email: 'email',
+        password: 'password',
+        passwordConfirm: 'password',
+    };
+
+    return variantMapper[props] ?? 'text';
+};
+
 const emit = defineEmits(['input', 'change', 'blur', 'focus']);
 
 const onInput = (event: Event): void => {
@@ -119,6 +134,7 @@ const onFocus = (event: FocusEvent): void => {
 <template>
     <div>
         <h3
+            v-if="inputTitle[variant]"
             :class="{
                 'after:content-[\'*\'] after:relative after:text-error after:left-[1px] after:top-[1.5px]':
                     required,
@@ -129,14 +145,16 @@ const onFocus = (event: FocusEvent): void => {
         </h3>
         <input
             v-bind="$attrs"
-            :type="variant === 'passwordConfirm' ? 'password' : variant"
+            :type="refinedVariant(variant)"
             :class="{
                 'border-purple': isFocused,
                 '!border-error': validationState === 'error',
+                'text-gray bg-[#E1E1E1] border-none': isDisabled,
             }"
             class="border-[1px] rounded-[6px] w-[100%] p-[16px] focus:outline-none mb-0"
             :placeholder="placeholders[variant]"
             :value="value"
+            :disabled="isDisabled"
             @input="onInput"
             @change="onChange"
             @focus="onFocus"
