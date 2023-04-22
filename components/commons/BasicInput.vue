@@ -63,6 +63,7 @@ const inputTitle: Record<string, string> = {
     password: '비밀번호',
     passwordConfirm: '비밀번호 확인',
     nickname: '닉네임',
+    goalTitle: '목표명을 입력해주세요.',
 };
 
 const placeholders: Record<string, string> = {
@@ -70,6 +71,7 @@ const placeholders: Record<string, string> = {
     password: '비밀번호 입력',
     passwordConfirm: '비밀번호 확인',
     nickname: '닉네임 입력',
+    goalTitle: '오늘의 목표 입력',
 };
 
 const breadcumbText: Record<string, string> = {

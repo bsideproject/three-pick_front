@@ -20,12 +20,9 @@ const onClickButton = () => {
 
 <template>
     <template v-if="showButton">
-        <button
-            class="bg-purple text-white p-1 rounded w-full h-20 disabled:bg-gray"
-            @click="onClickButton"
-        >
+        <basic-button class="h-20" @onClick="onClickButton">
             <slot />
-        </button>
+        </basic-button>
     </template>
     <template v-else>
         <AsyncForm />

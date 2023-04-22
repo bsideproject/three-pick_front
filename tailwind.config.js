@@ -11,12 +11,15 @@ module.exports = {
     theme: {
         colors: {
             'purple': '#5D31FE',
+            'middle-purple': '#9A7EFF',
+            'light-purple': '#D9CEFF',
             'orange': '#FF5416',
             'green': '#DEF048',
             'black': '#222222',
             'white': '#FFFFFF',
             'gray': '#969696',
             'light-gray': '#787878',
+            'bg-gray': '#f0f0f0',
             'hr': '#C8C8C8',
             'error': '#E83459',
         },
