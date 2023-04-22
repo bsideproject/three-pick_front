@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     head: {
         script: [{src: 'https://developers.kakao.com/sdk/js/kakao.js'}],
     },
-    modules: [['@nuxtjs/eslint-module', {}], '@pinia/nuxt'],
+    modules: [['@nuxtjs/eslint-module', {}], '@pinia/nuxt', 'nuxt-icons'],
     pinia: {
         autoImports: [
             // automatically imports `defineStore`
@@ -34,4 +34,7 @@ export default defineNuxtConfig({
             pathPrefix: false,
         },
     ],
+    NuxtIcons: {
+        addPlugin: true,
+    },
 });
