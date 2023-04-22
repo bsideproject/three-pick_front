@@ -10,7 +10,7 @@ const AsyncForm = defineAsyncComponent(
     () => import(`~/components/${props.formType}.vue`),
 );
 
-const showButton = ref(false);
+const showButton = ref(true);
 
 const onClickButton = () => {
     emit('onClick');
