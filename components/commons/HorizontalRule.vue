@@ -13,6 +13,6 @@ const showContents = () => !!slots.default;
         >
             <slot />
         </span>
-        <hr class="absolute w-[485px] -z-10 bg-hr border-1" />
+        <hr class="absolute bg-hr w-[485px] -z-10 border-1" />
     </div>
 </template>

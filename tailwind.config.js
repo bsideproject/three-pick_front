@@ -26,6 +26,7 @@ module.exports = {
             DEFAULT: '6px',
         },
         fontSize: {
+            'xs': '0.6rem', // 12px
             'sm': '0.7rem', // 14px
             'base': '0.8rem', // 16px
             'xl': '1.01rem', // 20px
