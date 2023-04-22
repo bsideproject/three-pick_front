@@ -63,6 +63,7 @@ const inputTitle: Record<string, string> = {
     password: '비밀번호',
     passwordConfirm: '비밀번호 확인',
     nickname: '닉네임',
+    goalTitle: '목표명을 입력해주세요.',
 };
 
 const placeholders: Record<string, string> = {
@@ -70,6 +71,7 @@ const placeholders: Record<string, string> = {
     password: '비밀번호 입력',
     passwordConfirm: '비밀번호 확인',
     nickname: '닉네임 입력',
+    goalTitle: '오늘의 목표 입력',
 };
 
 const breadcumbText: Record<string, string> = {
@@ -163,10 +165,10 @@ const onFocus = (event: FocusEvent): void => {
             v-bind="$attrs"
             :type="refinedVariant(variant)"
             :class="{
-                'border-gray': !isFocused,
-                'border-purple': isFocused,
+                'border-gray50': !isFocused,
+                'border-purple7': isFocused,
                 '!border-error': validationState === 'error',
-                'text-gray bg-[#E1E1E1] border-none': isDisabled,
+                'text-gray50 bg-gray20 border-none': isDisabled,
             }"
             class="border-[1px] rounded-[6px] w-[100%] p-[16px] focus:outline-none mb-0"
             :placeholder="placeholder ?? placeholders[variant]"
@@ -184,7 +186,7 @@ const onFocus = (event: FocusEvent): void => {
                 (variant === 'email' && validationState === 'error') ||
                 (variant === 'passwordConfirm' && validationState === 'error')
             "
-            class="mt-[10px] font-medium text-xs text-gray"
+            class="mt-[10px] font-medium text-xs text-gray50"
             :class="{
                 '!text-error': validationState === 'error',
             }"

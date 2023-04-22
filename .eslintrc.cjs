@@ -71,6 +71,7 @@ module.exports = {
                 ignores: ['default', 'index', 'Header', 'login'],
             },
         ],
+        'vue/no-multiple-template-root': 'off',
     },
     overrides: [
         {
