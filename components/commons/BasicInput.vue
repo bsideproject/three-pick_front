@@ -153,10 +153,10 @@ const onFocus = (event: FocusEvent): void => {
     <div>
         <h3
             v-if="variant && inputTitle[variant]"
-            :class="{
-                'after:content-[\'*\'] after:relative after:text-error after:left-[1px] after:top-[1.5px]':
-                    required,
-            }"
+            :class="
+                required &&
+                `after:content-['*'] after:relative after:text-error after:left-[1px] after:top-[1.5px]`
+            "
             class="text-sm mb-[10px]"
         >
             {{ title ?? inputTitle[variant] }}

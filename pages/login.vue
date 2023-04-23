@@ -1,6 +1,7 @@
-<script lang="ts">
-import {defineComponent, computed, ref} from 'vue';
+<script setup lang="ts">
+import {computed, ref} from 'vue';
 
+import {loginApi} from '~/apis';
 import KakaoLogin from '~/assets/svg/KakaoLoginButton.svg?component';
 import ThreePick from '~/assets/svg/ThreePick.svg?component';
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
@@ -8,37 +9,24 @@ import {baseURL} from '~/composables';
 
 const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
 
-export default defineComponent({
-    name: 'LoginPage',
-    components: {KakaoLogin, ThreePick, ThreePickLogo},
-    setup(props) {
-        const userEmailInput = ref<string>('');
-        const userPasswordInput = ref<string>('');
+const userEmailInput = ref<string>('');
+const userPasswordInput = ref<string>('');
 
-        const test = (params: string) => {
-            userEmailInput.value = params;
-        };
+const onInputEmail = (params: string) => {
+    userEmailInput.value = params;
+};
 
-        const testPassword = (params: string) => {
-            userPasswordInput.value = params;
-        };
+const onInputPassword = (params: string) => {
+    userPasswordInput.value = params;
+};
 
-        const loginButtonActivated = computed(
-            () =>
-                userEmailInput.value.length > 0 &&
-                userPasswordInput.value.length > 0,
-        );
+const loginButtonActivated = computed(
+    () => userEmailInput.value.length > 0 && userPasswordInput.value.length > 0,
+);
 
-        return {
-            kakaoUrl,
-            test,
-            testPassword,
-            userEmailInput,
-            userPasswordInput,
-            loginButtonActivated,
-        };
-    },
-});
+const onClickLogin = () => {
+    loginApi(userEmailInput.value, userPasswordInput.value);
+};
 </script>
 <template>
     <div class="flex flex-col justify-center items-center mt-[112px]">
@@ -60,22 +48,22 @@ export default defineComponent({
                 :value="userEmailInput"
                 :required="true"
                 variant="email"
-                @input.self="test"
+                @input.self="onInputEmail"
             />
             <basic-input
                 variant="password"
                 :value="userPasswordInput"
                 :required="true"
-                @input.self="testPassword"
+                @input.self="onInputPassword"
             />
             <basic-button
                 :theme="'primary'"
                 class="mt-[20px]"
                 :disabled="!loginButtonActivated"
+                @onClick="onClickLogin"
                 >로그인하기</basic-button
             >
-            <section class="flex justify-between mt-[20px]">
-                <div>이메일 저장하기 섹션</div>
+            <section class="flex justify-end mt-[20px]">
                 <div>
                     <NuxtLink
                         class="font-medium underline text-base ml-[44px]"
