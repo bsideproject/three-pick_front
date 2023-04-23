@@ -20,6 +20,7 @@
         "vite-svg-loader": "^4.0.0"
     },
     "dependencies": {
+        "@nuxt/types": "^2.16.3",
         "@pinia/nuxt": "^0.4.7",
         "@vue/eslint-config-prettier": "^7.1.0",
         "@vue/eslint-config-typescript": "^11.0.2",
