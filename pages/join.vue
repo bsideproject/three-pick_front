@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import {useRouter} from 'nuxt/app';
 
-import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
 import {joinApi} from '~/apis';
+import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
 
 const userEmailInput = ref<string>('');
 const userPasswordInput = ref<string>('');
@@ -18,8 +19,9 @@ const nicknameCheckValidationStatus = ref<boolean>(true);
 const isEmailCodeInputVisible = ref<boolean>(false);
 const verifyCode = ref<string>('');
 
-const isEmailVerified = ref<boolean>(false);
-const isIncorrectVerifyCode = ref<boolean>(false);
+const isCorrectVerifyCode = ref<boolean | null>(null);
+
+const router = useRouter();
 
 const onInputEmail = (params: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,13 +57,49 @@ const onInputVerifyCode = (params: string) => {
     verifyCode.value = params;
 };
 
-const {getVerifyCode, validateVerifyCode} = joinApi;
+const {getVerifyCode, validateVerifyCode, join} = joinApi;
 
 const onGetVerifyCode = (retry = false) => {
     if (!retry) {
         isEmailCodeInputVisible.value = !isEmailCodeInputVisible.value;
     }
+    getVerifyCode(userEmailInput.value);
+};
+
+const onJudgeVerifyCode = () => {
     validateVerifyCode(userEmailInput.value, verifyCode.value);
+
+    // FIX ME : 인증 번호 제대로 갔다면,
+    // 인증 번호에 대한 인증이 제대로 처리되지 않았다면 > false.
+    // 현재 CORS 이슈로 아래와 같이 작성.
+    isCorrectVerifyCode.value = true;
+};
+
+const canContinueJoin = () =>
+    isCorrectVerifyCode.value === true &&
+    passwordInputValidationStatus.value &&
+    passwordCheckValidationStatus.value &&
+    nicknameCheckValidationStatus.value &&
+    userEmailInput.value.length > 0 &&
+    userPasswordInput.value.length > 0 &&
+    userPasswordCheckInput.value.length > 0 &&
+    userNicknameInput.value.length > 0;
+
+const onJoinThreePick = async () => {
+    const {data: userInfo, error} = await join(
+        userEmailInput.value,
+        userNicknameInput.value,
+        userPasswordInput.value,
+    );
+
+    if (error) {
+        console.error('회원가입 중 에러발생.');
+    } else {
+        // pinia 에 사용자 정보 동기화
+        console.log(userInfo);
+
+        router.push('/join-welcome');
+    }
 };
 </script>
 <template>
@@ -94,36 +132,44 @@ const onGetVerifyCode = (retry = false) => {
                 :theme="'primary'"
                 class="mt-[16px] mb-[32px]"
                 :disabled="emailVerifyButtonStatus"
-                @onClick="getVerifyCode(userEmailInput)"
+                @onClick="onGetVerifyCode"
                 >이메일 인증하기</basic-button
             >
-            <section
-                v-else
-                class="mt-4 mb-8 h-[176px] rounded bg-[#F0F0F0] p-6"
-            >
-                <h3 class="text-sm mb-4 text-purple7 font-semibold">
+            <section v-else class="mt-4 mb-8 h-[auto] rounded bg-[#F0F0F0] p-6">
+                <h3
+                    v-if="isCorrectVerifyCode"
+                    class="text-sm mb-4 text-purple7 font-semibold"
+                >
+                    이메일 인증이 완료되었어요.
+                </h3>
+                <h3 v-else class="text-sm mb-4 text-purple7 font-semibold">
                     이메일로 전송된 확인코드 6자리를 입력해 주세요.
                 </h3>
                 <div class="flex justify-between items-center">
                     <basic-input
                         v-model="verifyCode"
                         :value="verifyCode"
-                        class="w-full !h-12"
-                        variant="text"
+                        class="w-full"
+                        :variant="
+                            isCorrectVerifyCode === false ? 'codeError' : 'code'
+                        "
+                        :validationState="
+                            isCorrectVerifyCode === false ? 'error' : ''
+                        "
+                        :isDisabled="isCorrectVerifyCode ?? false"
                         @input.self="onInputVerifyCode"
                     />
                     <basic-button
                         :theme="'primary'"
-                        class="ml-2 w-[88px]"
-                        @onClick="onGetVerifyCode"
+                        class="ml-2 w-[120px] mt-[-25px] h-14"
+                        :disabled="isCorrectVerifyCode"
+                        @onClick="onJudgeVerifyCode"
                     >
                         인증하기</basic-button
                     >
                 </div>
-                <div class="text-xs text-gray mt-[10px]">
-                    확인코드는 최대 10분간만 유효해요.
-                </div>
                 <div
+                    v-if="!isCorrectVerifyCode"
                     class="font-medium text-xs underline mt-4 cursor-pointer"
                     @click="() => onGetVerifyCode(true)"
                 >
@@ -160,7 +206,8 @@ const onGetVerifyCode = (retry = false) => {
             <basic-button
                 :theme="'primary'"
                 class="mb-[32px]"
-                :disabled="!isEmailVerified"
+                :disabled="!canContinueJoin()"
+                @onClick="onJoinThreePick"
                 >회원가입하기</basic-button
             >
             <div class="flex justify-center font-medium text-sm text-gray">
@@ -176,9 +223,5 @@ const onGetVerifyCode = (retry = false) => {
 <style lang="scss" scoped>
 .input-margin {
     margin-top: 32px;
-}
-
-.test {
-    border: 1px solid red;
 }
 </style>

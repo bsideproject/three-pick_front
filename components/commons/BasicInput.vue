@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 
-defineProps({
+const props = defineProps({
     /**
      * Input 값
      */
@@ -39,7 +39,7 @@ defineProps({
         default: false,
     },
     /**
-     *
+     * Input placeholder 커스터마이징
      */
     placeholder: {
         type: String,
@@ -47,7 +47,7 @@ defineProps({
         default: null,
     },
     /**
-     *
+     * Input title 커스터마이징
      */
     title: {
         type: String,
@@ -80,6 +80,8 @@ const breadcumbText: Record<string, string> = {
     passwordConfirm: '비밀번호가 일치하지 않아요. 다시 입력해 주세요.',
     nickname:
         '닉네임은 2자~ 16자까지 입력 가능하며, 특수문자나 공백은 사용이 불가능해요.',
+    code: '확인코드는 최대 10분간만 유효해요.',
+    codeError: '확인코드가 일치하지 않아요.',
 };
 
 /**
@@ -170,7 +172,7 @@ const onFocus = (event: FocusEvent): void => {
                 '!border-error': validationState === 'error',
                 'text-gray50 bg-gray20 border-none': isDisabled,
             }"
-            class="border-[1px] rounded-[6px] w-[100%] p-[16px] focus:outline-none mb-0"
+            class="border-[1px] rounded w-[100%] p-[16px] focus:outline-none mb-0"
             :placeholder="placeholder ?? placeholders[variant]"
             :value="value"
             :disabled="isDisabled"
@@ -184,7 +186,10 @@ const onFocus = (event: FocusEvent): void => {
                 variant === 'password' ||
                 variant === 'nickname' ||
                 (variant === 'email' && validationState === 'error') ||
-                (variant === 'passwordConfirm' && validationState === 'error')
+                (variant === 'passwordConfirm' &&
+                    validationState === 'error') ||
+                variant === 'code' ||
+                variant === 'codeError'
             "
             class="mt-[10px] font-medium text-xs text-gray50"
             :class="{
