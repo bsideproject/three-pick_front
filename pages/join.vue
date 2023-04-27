@@ -66,13 +66,18 @@ const onGetVerifyCode = (retry = false) => {
     getVerifyCode(userEmailInput.value);
 };
 
-const onJudgeVerifyCode = () => {
-    validateVerifyCode(userEmailInput.value, verifyCode.value);
+const onJudgeVerifyCode = async () => {
+    const {data: result} = await validateVerifyCode(
+        userEmailInput.value,
+        verifyCode.value,
+    );
 
-    // FIX ME : 인증 번호 제대로 갔다면,
-    // 인증 번호에 대한 인증이 제대로 처리되지 않았다면 > false.
-    // 현재 CORS 이슈로 아래와 같이 작성.
-    isCorrectVerifyCode.value = true;
+    if (result.value) {
+        isCorrectVerifyCode.value = true;
+    } else {
+        console.error('인증 중 에러 발생.');
+        isCorrectVerifyCode.value = false;
+    }
 };
 
 const canContinueJoin = () =>

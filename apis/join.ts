@@ -7,12 +7,15 @@ export const joinApi = {
         });
     },
     validateVerifyCode: async (email: string, code: string) => {
-        await useApi(`/api/accounts/${email}/auth-check`, {
-            method: 'GET',
-            query: {
-                code,
+        return await useApi<Record<string, boolean>>(
+            `/api/accounts/${email}/auth-check`,
+            {
+                method: 'GET',
+                query: {
+                    code,
+                },
             },
-        });
+        );
     },
     join: async (email: string, nickname: string, password: string) => {
         return await useApi<UserInfo>(`/api/accounts`, {
