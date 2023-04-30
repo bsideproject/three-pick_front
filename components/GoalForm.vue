@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue';
 
-import {WEIGHT_LEVEL} from '~/types';
+import {createGoalApi} from '~/apis';
+import {GOAL_TYPE, WEIGHT_LEVEL} from '~/types';
 import type {WeightLevel} from '~/types';
 
 const hourPrice = ref(1000); // TODO
@@ -33,11 +34,24 @@ const goalPrice = computed(() => {
             Math.floor(
                 hourPrice.value *
                     (goalHour.value + Number(goalMinute.value / 60)),
-            ) * curWeight.value
+            ) * Number(curWeight.value)
         );
     }
     return 0;
 });
+
+const onClickCreateButton = async () => {
+    emit('onConfirm');
+    const {data} = await createGoalApi(
+        1,
+        goalTitle.value,
+        GOAL_TYPE.TODAY,
+        goalHour.value,
+        goalMinute.value,
+        curWeight.value,
+    );
+    console.log(data.value);
+};
 
 const emit = defineEmits(['onConfirm', 'onCancel']);
 </script>
@@ -101,7 +115,7 @@ const emit = defineEmits(['onConfirm', 'onCancel']);
             <basic-button :theme="'ghost'" @onClick="emit('onCancel')"
                 >취소하기</basic-button
             >
-            <basic-button :theme="'primary'" @onClick="emit('onConfirm')"
+            <basic-button :theme="'primary'" @onClick="onClickCreateButton"
                 >생성하기</basic-button
             >
         </div>
