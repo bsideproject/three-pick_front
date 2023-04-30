@@ -1,6 +1,12 @@
 <script setup lang="ts">
 const onClickCreateGoal = () => {
-    console.log('click!sdafds!!');
+    console.log('click!!!');
+};
+const onConfirmDayGoal = () => {
+    console.log('day goal confirm');
+};
+const onCancelDayGoal = () => {
+    console.log('day goal cancel');
 };
 </script>
 
@@ -72,6 +78,8 @@ const onClickCreateGoal = () => {
                         class="text-base"
                         :formType="'GoalForm'"
                         @onClick="onClickCreateGoal"
+                        @onConfirm="onConfirmDayGoal"
+                        @onCancel="onCancelDayGoal"
                     >
                         + 첫 번째 목표 생성하기
                     </create-form-button>

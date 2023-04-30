@@ -23,6 +23,8 @@ const goalPrice = computed(() => {
     }
     return 0;
 });
+
+const emit = defineEmits(['onConfirm', 'onCancel']);
 </script>
 
 <template>
@@ -67,8 +69,12 @@ const goalPrice = computed(() => {
         </div>
 
         <div class="flex flex-row gap-2 mt-4">
-            <basic-button :theme="'ghost'">취소하기</basic-button>
-            <basic-button :theme="'primary'">생성하기</basic-button>
+            <basic-button :theme="'ghost'" @onClick="emit('onCancel')"
+                >취소하기</basic-button
+            >
+            <basic-button :theme="'primary'" @onClick="emit('onConfirm')"
+                >생성하기</basic-button
+            >
         </div>
     </div>
 </template>
