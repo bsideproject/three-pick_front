@@ -1,5 +1,5 @@
 export interface AuthInfo {
     accessToken: string;
-    accountId: string;
+    accountId: number;
     refreshToken: string;
 }

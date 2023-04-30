@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {useRouter} from 'nuxt/app';
 import {computed, ref} from 'vue';
 
 import {loginApi} from '~/apis';
@@ -6,11 +7,16 @@ import KakaoLogin from '~/assets/svg/KakaoLoginButton.svg?component';
 import ThreePick from '~/assets/svg/ThreePick.svg?component';
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
 import {baseURL} from '~/composables';
+import {useAuthStore} from '~~/stores/AuthStore';
 
 const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
 
 const userEmailInput = ref<string>('');
 const userPasswordInput = ref<string>('');
+
+const {setAccessToken, setRefreshToken, setAccountId} = useAuthStore();
+
+const router = useRouter();
 
 const onInputEmail = (params: string) => {
     userEmailInput.value = params;
@@ -24,8 +30,21 @@ const loginButtonActivated = computed(
     () => userEmailInput.value.length > 0 && userPasswordInput.value.length > 0,
 );
 
-const onClickLogin = () => {
-    loginApi(userEmailInput.value, userPasswordInput.value);
+const onClickLogin = async () => {
+    const {data, error} = await loginApi(
+        userEmailInput.value,
+        userPasswordInput.value,
+    );
+
+    if (error.value) {
+        console.error('로그인중 에러 발생');
+    } else {
+        data.value?.accessToken && setAccessToken(data.value?.accessToken);
+        data.value?.refreshToken && setRefreshToken(data.value?.refreshToken);
+        data.value?.accountId && setAccountId(data.value?.accountId);
+
+        router.push('/');
+    }
 };
 </script>
 <template>
