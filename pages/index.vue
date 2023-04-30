@@ -6,7 +6,7 @@ const onClickCreateGoal = () => {
 
 <template>
     <div>
-        <div class="w-full flex justify-center shadow-md">
+        <div class="w-full flex justify-center shadow-md sm:px-4">
             <div
                 class="max-w-[988px] flex-1 flex flex-row justify-between py-10 text-2xl"
             >
