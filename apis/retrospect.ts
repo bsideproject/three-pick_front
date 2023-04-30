@@ -1,3 +1,5 @@
+import type {GoalType, GoalStatus} from '~/types';
+
 /**
  * 회고 생성
  */
