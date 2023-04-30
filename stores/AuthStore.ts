@@ -1,6 +1,7 @@
 export const useAuthStore = defineStore('auth', () => {
-    const accessToken = ref('');
-    const refreshToken = ref('');
+    const accessToken = ref<string>('');
+    const refreshToken = ref<string>('');
+    const accountId = ref<number>(0);
 
     function setAccessToken(auth: string) {
         accessToken.value = auth;
@@ -10,5 +11,16 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken.value = refresh;
     }
 
-    return {accessToken, refreshToken, setAccessToken, setRefreshToken};
+    function setAccountId(id: number) {
+        accountId.value = id;
+    }
+
+    return {
+        accessToken,
+        refreshToken,
+        accountId,
+        setAccessToken,
+        setRefreshToken,
+        setAccountId,
+    };
 });

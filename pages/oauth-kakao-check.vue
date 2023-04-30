@@ -9,11 +9,13 @@ const router = useRouter();
 
 onMounted(() => {
     const {auth, refresh} = route.query;
-    const {setAccessToken, setRefreshToken} = useAuthStore();
+    const accountId = route.query['account-id'];
+    const {setAccessToken, setRefreshToken, setAccountId} = useAuthStore();
 
     try {
         setAccessToken(auth as string);
         setRefreshToken(refresh as string);
+        setAccountId(parseInt(accountId as string));
         router.push('/');
     } catch (e) {
         console.error(e);

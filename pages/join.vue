@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {ref} from 'vue';
 import {useRouter} from 'nuxt/app';
+import {ref} from 'vue';
 
 import {joinApi} from '~/apis';
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
@@ -59,11 +59,17 @@ const onInputVerifyCode = (params: string) => {
 
 const {getVerifyCode, validateVerifyCode, join} = joinApi;
 
-const onGetVerifyCode = (retry = false) => {
+const onGetVerifyCode = async (retry = false) => {
+    const {error} = await getVerifyCode(userEmailInput.value);
+
+    if (error.value) {
+        console.error('이메일 인증 중 에러 발생.');
+        return;
+    }
+
     if (!retry) {
         isEmailCodeInputVisible.value = !isEmailCodeInputVisible.value;
     }
-    getVerifyCode(userEmailInput.value);
 };
 
 const onJudgeVerifyCode = async () => {
@@ -91,7 +97,7 @@ const canContinueJoin = () =>
     userNicknameInput.value.length > 0;
 
 const onJoinThreePick = async () => {
-    const {data: userInfo, error} = await join(
+    const {data: url, error} = await join(
         userEmailInput.value,
         userNicknameInput.value,
         userPasswordInput.value,
@@ -100,10 +106,8 @@ const onJoinThreePick = async () => {
     if (error) {
         console.error('회원가입 중 에러발생.');
     } else {
-        // pinia 에 사용자 정보 동기화
-        console.log(userInfo);
-
-        router.push('/join-welcome');
+        // 회원가입 완료시 받은 url로 리다이렉트
+        url.value && router.push(url.value);
     }
 };
 </script>

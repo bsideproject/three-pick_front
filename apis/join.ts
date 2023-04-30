@@ -1,8 +1,6 @@
-import type {UserInfo} from '~/types';
-
 export const joinApi = {
     getVerifyCode: async (email: string) => {
-        await useApi(`/api/accounts/${email}/auth`, {
+        return await useApi(`/api/accounts/${email}/auth`, {
             method: 'POST',
         });
     },
@@ -18,11 +16,11 @@ export const joinApi = {
         );
     },
     join: async (email: string, nickname: string, password: string) => {
-        return await useApi<UserInfo>(`/api/accounts`, {
+        return await useApi<string>(`/api/accounts`, {
             method: 'POST',
             body: {
                 email,
-                nickname,
+                nickName: nickname,
                 password,
             },
         });
