@@ -9,6 +9,11 @@ import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
 import {baseURL} from '~/composables';
 import {useAuthStore} from '~~/stores/AuthStore';
 
+// eslint-disable-next-line no-undef
+definePageMeta({
+    layout: 'no-header',
+});
+
 const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
 
 const userEmailInput = ref<string>('');
