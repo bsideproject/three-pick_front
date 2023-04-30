@@ -4,17 +4,25 @@ import {ref, defineAsyncComponent} from 'vue';
 const props = defineProps({
     formType: String,
 });
-const emit = defineEmits(['onClick']);
+const emit = defineEmits(['onClick', 'onConfirm', 'onCancel']);
 
 const AsyncForm = defineAsyncComponent(
     () => import(`~/components/${props.formType}.vue`),
 );
 
-const showButton = ref(false);
+const showButton = ref(true);
 
 const onClickButton = () => {
     emit('onClick');
     showButton.value = false;
+};
+const onConfirm = () => {
+    emit('onConfirm');
+    showButton.value = true;
+};
+const onCancel = () => {
+    emit('onCancel');
+    showButton.value = true;
 };
 </script>
 
@@ -25,6 +33,6 @@ const onClickButton = () => {
         </basic-button>
     </template>
     <template v-else>
-        <AsyncForm />
+        <AsyncForm @onConfirm="onConfirm" @onCancel="onCancel" />
     </template>
 </template>
