@@ -1,7 +1,19 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 
+import {createRetrospectApi} from '~/apis';
+
 const content = ref('');
+
+const onClickCreateButton = async () => {
+    emit('onConfirm');
+    const {data} = await createRetrospectApi(
+        3,
+        content.value,
+        new Date().toISOString().substring(0, 10),
+    );
+    console.log(data.value);
+};
 
 const emit = defineEmits(['onConfirm', 'onCancel']);
 </script>
@@ -15,7 +27,7 @@ const emit = defineEmits(['onConfirm', 'onCancel']);
         <basic-button :theme="'ghost'" @onClick="emit('onCancel')"
             >취소하기</basic-button
         >
-        <basic-button :theme="'primary'" @onClick="emit('onConfirm')"
+        <basic-button :theme="'primary'" @onClick="onClickCreateButton"
             >생성하기</basic-button
         >
     </div>

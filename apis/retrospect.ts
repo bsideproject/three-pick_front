@@ -35,7 +35,11 @@ export const updateRetrospectApi = (
 /**
  * 회고 조회
  */
-export const getRetrospectApi = (accountId: number, date: string) =>
-    useApi(`/api/retrospects`, {
-        method: 'GET',
-    });
+export const getRetrospectApi = async (accountId: number, date: string) => {
+    return await useApi<{content: string}>(
+        `/api/retrospects?account-id=${accountId}&date=${date}`,
+        {
+            method: 'GET',
+        },
+    );
+};

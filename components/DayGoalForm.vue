@@ -43,7 +43,7 @@ const goalPrice = computed(() => {
 const onClickCreateButton = async () => {
     emit('onConfirm');
     const {data} = await createGoalApi(
-        1,
+        3,
         goalTitle.value,
         GOAL_TYPE.TODAY,
         goalHour.value,

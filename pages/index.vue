@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {ref, onMounted} from 'vue';
+
+import {getRetrospectApi} from '~/apis';
+
 const onClickCreateGoal = () => {
     console.log('click!!!');
 };
@@ -8,6 +12,15 @@ const onConfirmDayGoal = () => {
 const onCancelDayGoal = () => {
     console.log('day goal cancel');
 };
+
+const retrospect = ref('');
+onMounted(async () => {
+    const {data} = await getRetrospectApi(
+        3,
+        new Date().toISOString().substring(0, 10),
+    );
+    retrospect.value = data.value?.content ?? '';
+});
 </script>
 
 <template>
@@ -82,22 +95,35 @@ const onCancelDayGoal = () => {
                     >
                         + 첫 번째 목표 생성하기
                     </create-form-button>
-                    <span class="font-bold text-xl pb-2 pt-10 flex">
-                        <nuxt-icon
-                            name="main/HistoryIcon"
-                            class="my-auto mr-2"
-                        />
-                        오늘은 어떤 하루였나요?
-                    </span>
-                    <span class="text-gray60 text-sm pb-4">
-                        하루를 마무리하며 기록해보세요.
-                    </span>
-                    <create-form-button
-                        class="text-base"
-                        :formType="'RetrospectForm'"
-                    >
-                        + 회고 작성하기
-                    </create-form-button>
+                    <div class="flex flex-row">
+                        <div class="flex flex-col flex-1">
+                            <span class="font-bold text-xl pb-2 pt-10 flex">
+                                <nuxt-icon
+                                    name="main/HistoryIcon"
+                                    class="my-auto mr-2"
+                                />
+                                오늘의 회고
+                            </span>
+                            <span class="text-gray60 text-sm pb-4">
+                                하루를 마무리하며 기록해보세요.
+                            </span>
+                        </div>
+                        <nuxt-icon name="main/MoreIcon" class="my-auto mr-2" />
+                    </div>
+
+                    <template v-if="retrospect">
+                        <div class="border-t border-dashed pt-2 border-gray50">
+                            {{ retrospect }}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <create-form-button
+                            class="text-base"
+                            :formType="'RetrospectForm'"
+                        >
+                            + 회고 작성하기
+                        </create-form-button>
+                    </template>
                 </div>
             </div>
         </div>
