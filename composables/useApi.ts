@@ -19,16 +19,19 @@ export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
                 ...options.headers,
                 Authorization: `Bearer ${'myToken'}`,
             };
+            console.log(request);
         },
         onRequestError({request, options, error}) {
             // Handle the request errors
         },
         onResponse({request, response, options}) {
             // Process the response data
+            console.log(response);
             return response._data;
         },
         onResponseError({request, response, options}) {
             // Handle the response errors
+            console.log(response);
         },
     });
 };

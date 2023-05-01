@@ -37,4 +37,5 @@ export default defineNuxtConfig({
     NuxtIcons: {
         addPlugin: true,
     },
+    ssr: false,
 });

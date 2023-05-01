@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
 import {ref, onMounted} from 'vue';
 
 import {getRetrospectApi} from '~/apis';
+import {useRetrospectStore} from '~/stores/retrospectStore';
 
 const onClickCreateGoal = () => {
     console.log('click!!!');
@@ -13,13 +15,11 @@ const onCancelDayGoal = () => {
     console.log('day goal cancel');
 };
 
-const retrospect = ref('');
-onMounted(async () => {
-    const {data} = await getRetrospectApi(
-        3,
-        new Date().toISOString().substring(0, 10),
-    );
-    retrospect.value = data.value?.content ?? '';
+const retrospectStore = useRetrospectStore();
+const {retrospect} = storeToRefs(retrospectStore);
+const isUpdate = ref(false);
+onMounted(() => {
+    getRetrospectApi(3, new Date().toISOString().substring(0, 10));
 });
 </script>
 
@@ -95,9 +95,9 @@ onMounted(async () => {
                     >
                         + 첫 번째 목표 생성하기
                     </create-form-button>
-                    <div class="flex flex-row">
+                    <div class="flex flex-row pb-2 pt-10">
                         <div class="flex flex-col flex-1">
-                            <span class="font-bold text-xl pb-2 pt-10 flex">
+                            <span class="font-bold text-xl flex">
                                 <nuxt-icon
                                     name="main/HistoryIcon"
                                     class="my-auto mr-2"
@@ -108,12 +108,27 @@ onMounted(async () => {
                                 하루를 마무리하며 기록해보세요.
                             </span>
                         </div>
-                        <nuxt-icon name="main/MoreIcon" class="my-auto mr-2" />
+                        <more-button
+                            v-if="retrospect"
+                            :updateValue="'회고 수정하기'"
+                            :deleteValue="'회고 삭제하기'"
+                            @onUpdate="isUpdate = true"
+                        />
                     </div>
-
-                    <template v-if="retrospect">
+                    <template v-if="retrospect && isUpdate">
+                        <create-form-button
+                            class="text-base"
+                            :formType="'RetrospectForm'"
+                            :isUpdate="isUpdate"
+                            :data="retrospect"
+                            @onConfirm="isUpdate = false"
+                        >
+                            + 회고 작성하기
+                        </create-form-button>
+                    </template>
+                    <template v-else-if="retrospect">
                         <div class="border-t border-dashed pt-2 border-gray50">
-                            {{ retrospect }}
+                            {{ retrospect.content }}
                         </div>
                     </template>
                     <template v-else>
