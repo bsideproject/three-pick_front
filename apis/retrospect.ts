@@ -1,5 +1,3 @@
-import type {GoalType, GoalStatus} from '~/types';
-
 /**
  * 회고 생성
  */
@@ -18,7 +16,7 @@ export const createRetrospectApi = (
     });
 
 /**
- * 목표 수정
+ * 회고 수정
  */
 export const updateRetrospectApi = (
     accountId: number,
