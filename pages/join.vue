@@ -5,6 +5,11 @@ import {ref} from 'vue';
 import {joinApi} from '~/apis';
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
 
+// eslint-disable-next-line no-undef
+definePageMeta({
+    layout: 'no-header',
+});
+
 const userEmailInput = ref<string>('');
 const userPasswordInput = ref<string>('');
 const userPasswordCheckInput = ref<string>('');
