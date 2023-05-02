@@ -12,6 +12,13 @@ const AsyncForm = defineAsyncComponent(
 
 const showButton = ref(true);
 
+const buttonThemeByFormType: Record<string, string> = {
+    MonthGoalForm: 'default',
+    HourValueForm: 'secondary',
+    DayGoalForm: 'primary',
+    RetrospectForm: 'primary',
+};
+
 const onClickButton = () => {
     emit('onClick');
     showButton.value = false;
@@ -28,7 +35,11 @@ const onCancel = () => {
 
 <template>
     <template v-if="showButton">
-        <basic-button :theme="'primary'" class="h-20" @onClick="onClickButton">
+        <basic-button
+            :theme="buttonThemeByFormType[formType]"
+            class="h-20"
+            @onClick="onClickButton"
+        >
             <slot />
         </basic-button>
     </template>

@@ -1,12 +1,26 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue';
 
-import {WEIGHT_LEVEL} from '~/types';
+import {createGoalApi} from '~/apis';
+import {GOAL_TYPE, WEIGHT_LEVEL} from '~/types';
 import type {WeightLevel} from '~/types';
 
 const hourPrice = ref(1000); // TODO
 
 const goalTitle = ref('');
+const onInputGoalTitle = (params: string) => {
+    goalTitle.value = params;
+};
+
+const goalHour = ref(0);
+const onInputGoalHour = (params: number) => {
+    goalHour.value = params;
+};
+
+const goalMinute = ref(0);
+const onInputGoalMinute = (params: number) => {
+    goalMinute.value = params;
+};
 
 const curWeight = ref(WEIGHT_LEVEL['0']);
 const weightLevels = Object.keys(WEIGHT_LEVEL);
@@ -14,30 +28,59 @@ const isSelectedWeight = (weight: WeightLevel) => {
     return curWeight.value === WEIGHT_LEVEL[weight];
 };
 
-const hour = ref(0);
-const minute = ref(0);
-
 const goalPrice = computed(() => {
-    if (hour.value && minute.value) {
-        return hourPrice.value * (hour.value + Number(minute.value / 60));
+    if (goalHour.value && goalMinute.value) {
+        return (
+            Math.floor(
+                hourPrice.value *
+                    (goalHour.value + Number(goalMinute.value / 60)),
+            ) * Number(curWeight.value)
+        );
     }
     return 0;
 });
+
+const onClickCreateButton = async () => {
+    emit('onConfirm');
+    const {data} = await createGoalApi(
+        1,
+        goalTitle.value,
+        GOAL_TYPE.TODAY,
+        goalHour.value,
+        goalMinute.value,
+        curWeight.value,
+    );
+    console.log(data.value);
+};
 
 const emit = defineEmits(['onConfirm', 'onCancel']);
 </script>
 
 <template>
     <div class="flex flex-col px-4 py-5 bg-gray10">
-        <basic-input :value="goalTitle" :variant="'goalTitle'" />
+        <basic-input
+            :value="goalTitle"
+            :variant="'goalTitle'"
+            @input.self="onInputGoalTitle"
+        />
 
         <div class="mt-8 flex flex-row gap-7">
             <div class="w-1/2">
                 <span class="text-sm"> 시간을 설정해주세요. </span>
                 <div class="flex flex-row items-center mt-[10px]">
-                    <basic-input :placeholder="'시간'" class="text-center" />
+                    <basic-input
+                        :value="goalHour"
+                        :placeholder="'시간'"
+                        class="text-center"
+                        @input.self="onInputGoalHour"
+                    />
                     <span class="px-2"> : </span>
-                    <basic-input :placeholder="'분'" class="text-center" />
+                    <basic-input
+                        :value="goalMinute"
+                        :placeholder="'분'"
+                        class="text-center"
+                        @input.self="onInputGoalMinute"
+                    />
                 </div>
             </div>
             <div class="w-1/2">
@@ -72,7 +115,7 @@ const emit = defineEmits(['onConfirm', 'onCancel']);
             <basic-button :theme="'ghost'" @onClick="emit('onCancel')"
                 >취소하기</basic-button
             >
-            <basic-button :theme="'primary'" @onClick="emit('onConfirm')"
+            <basic-button :theme="'primary'" @onClick="onClickCreateButton"
                 >생성하기</basic-button
             >
         </div>
