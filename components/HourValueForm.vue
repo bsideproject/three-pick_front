@@ -2,6 +2,7 @@
 import {ref} from 'vue';
 
 import {updateHourValueApi} from '~/apis';
+import {useAuthStore} from '~~/stores/AuthStore';
 
 const hourValue = ref<number>();
 const onInputHourValue = (params: number) => {
@@ -10,8 +11,9 @@ const onInputHourValue = (params: number) => {
 
 const onClickCreateButton = async () => {
     emit('onConfirm');
-    const {data} = await updateHourValueApi(3, hourValue.value ?? 0);
-    console.log(data.value);
+
+    const {accountId} = useAuthStore();
+    await updateHourValueApi(accountId, hourValue.value ?? 0);
 };
 
 const emit = defineEmits(['onConfirm', 'onCancel']);

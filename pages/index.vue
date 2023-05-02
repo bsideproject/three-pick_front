@@ -6,6 +6,7 @@ import {useRouter} from 'vue-router';
 import {getRetrospectApi, getUserInfoApi} from '~/apis';
 import {useAuthStore} from '~/stores/AuthStore';
 import {useRetrospectStore} from '~/stores/RetrospectStore';
+import {useUserInfoStore} from '~~/stores/UserInfoStore';
 
 const onClickCreateGoal = () => {
     console.log('click!!!');
@@ -19,9 +20,9 @@ const onCancelDayGoal = () => {
 
 const retrospectStore = useRetrospectStore();
 const {retrospect} = storeToRefs(retrospectStore);
-console.log(retrospect.value);
 const isUpdate = ref(retrospect.value ?? '' !== '');
-
+const userInfoStore = useUserInfoStore();
+const {userInfo} = storeToRefs(userInfoStore);
 const router = useRouter();
 onMounted(async () => {
     const {accessToken, accountId} = useAuthStore();
@@ -29,7 +30,7 @@ onMounted(async () => {
         router.push('/login');
     }
 
-    await getUserInfoApi(accountId);
+    getUserInfoApi(accountId);
     getRetrospectApi(accountId, new Date().toISOString().substring(0, 10));
 });
 </script>
@@ -79,15 +80,29 @@ onMounted(async () => {
                                 />
                                 한 시간의 가치를 설정해 주세요.
                             </span>
-                            <span class="text-gray60 text-sm pb-4">
+                            <span
+                                v-if="userInfo && !userInfo.timeValue"
+                                class="text-gray60 text-sm pb-4"
+                            >
                                 목표 달성 시 해당 가치로 환산해 드려요.
                             </span>
-                            <create-form-button
-                                class="text-base"
-                                :formType="'HourValueForm'"
-                            >
-                                + 한 시간의 가치 설정하기
-                            </create-form-button>
+
+                            <template v-if="userInfo && userInfo.timeValue > 0">
+                                <div>{{ `${userInfo.timeValue}원` }}</div>
+                                <div>
+                                    {{
+                                        `남은 수정 횟수: ${userInfo.changeCount}`
+                                    }}
+                                </div>
+                            </template>
+                            <template v-else>
+                                <create-form-button
+                                    class="text-base"
+                                    :formType="'HourValueForm'"
+                                >
+                                    + 한 시간의 가치 설정하기
+                                </create-form-button>
+                            </template>
                         </div>
                     </div>
                 </div>

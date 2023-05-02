@@ -53,6 +53,5 @@ export const getRetrospectApi = async (accountId: number, date: string) => {
     );
 
     const {setRetrospect} = useRetrospectStore();
-    console.log(data.value);
     setRetrospect(data.value ?? {content: ''});
 };
