@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
+import {ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
+
+import {getRetrospectApi, getUserInfoApi} from '~/apis';
+import {useAuthStore} from '~/stores/AuthStore';
+import {useRetrospectStore} from '~/stores/RetrospectStore';
+import {useUserInfoStore} from '~~/stores/UserInfoStore';
+
 const onClickCreateGoal = () => {
     console.log('click!!!');
 };
@@ -8,6 +17,25 @@ const onConfirmDayGoal = () => {
 const onCancelDayGoal = () => {
     console.log('day goal cancel');
 };
+
+const retrospectStore = useRetrospectStore();
+const {retrospect} = storeToRefs(retrospectStore);
+const isUpdate = ref(false);
+const userInfoStore = useUserInfoStore();
+const {userInfo} = storeToRefs(userInfoStore);
+const router = useRouter();
+onMounted(async () => {
+    const {accessTokenCookie, accountIdCookie} = useAuthStore();
+    if (!accessTokenCookie) {
+        router.push('/login');
+    }
+
+    getUserInfoApi(accountIdCookie);
+    getRetrospectApi(
+        accountIdCookie,
+        new Date().toISOString().substring(0, 10),
+    );
+});
 </script>
 
 <template>
@@ -55,15 +83,29 @@ const onCancelDayGoal = () => {
                                 />
                                 한 시간의 가치를 설정해 주세요.
                             </span>
-                            <span class="text-gray60 text-sm pb-4">
+                            <span
+                                v-if="userInfo && !userInfo.timeValue"
+                                class="text-gray60 text-sm pb-4"
+                            >
                                 목표 달성 시 해당 가치로 환산해 드려요.
                             </span>
-                            <create-form-button
-                                class="text-base"
-                                :formType="'HourValueForm'"
-                            >
-                                + 한 시간의 가치 설정하기
-                            </create-form-button>
+
+                            <template v-if="userInfo && userInfo.timeValue > 0">
+                                <div>{{ `${userInfo.timeValue}원` }}</div>
+                                <div>
+                                    {{
+                                        `남은 수정 횟수: ${userInfo.changeCount}`
+                                    }}
+                                </div>
+                            </template>
+                            <template v-else>
+                                <create-form-button
+                                    class="text-base"
+                                    :formType="'HourValueForm'"
+                                >
+                                    + 한 시간의 가치 설정하기
+                                </create-form-button>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -82,22 +124,52 @@ const onCancelDayGoal = () => {
                     >
                         + 첫 번째 목표 생성하기
                     </create-form-button>
-                    <span class="font-bold text-xl pb-2 pt-10 flex">
-                        <nuxt-icon
-                            name="main/HistoryIcon"
-                            class="my-auto mr-2"
+                    <div class="flex flex-row pb-2 pt-10">
+                        <div class="flex flex-col flex-1">
+                            <span class="font-bold text-xl flex">
+                                <nuxt-icon
+                                    name="main/HistoryIcon"
+                                    class="my-auto mr-2"
+                                />
+                                오늘의 회고
+                            </span>
+                            <span class="text-gray60 text-sm pb-4">
+                                하루를 마무리하며 기록해보세요.
+                            </span>
+                        </div>
+                        <more-button
+                            v-if="retrospect && retrospect.content"
+                            :updateValue="'회고 수정하기'"
+                            :deleteValue="'회고 삭제하기'"
+                            @onUpdate="isUpdate = true"
                         />
-                        오늘은 어떤 하루였나요?
-                    </span>
-                    <span class="text-gray60 text-sm pb-4">
-                        하루를 마무리하며 기록해보세요.
-                    </span>
-                    <create-form-button
-                        class="text-base"
-                        :formType="'RetrospectForm'"
+                    </div>
+                    <template
+                        v-if="retrospect && retrospect.content && isUpdate"
                     >
-                        + 회고 작성하기
-                    </create-form-button>
+                        <create-form-button
+                            class="text-base"
+                            :formType="'RetrospectForm'"
+                            :isUpdate="isUpdate"
+                            :data="retrospect"
+                            @onConfirm="isUpdate = false"
+                        >
+                            + 회고 작성하기
+                        </create-form-button>
+                    </template>
+                    <template v-else-if="retrospect && retrospect.content">
+                        <div class="border-t border-dashed pt-2 border-gray50">
+                            {{ retrospect.content }}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <create-form-button
+                            class="text-base"
+                            :formType="'RetrospectForm'"
+                        >
+                            + 회고 작성하기
+                        </create-form-button>
+                    </template>
                 </div>
             </div>
         </div>

@@ -7,9 +7,9 @@ export const createGoalApi = (
     accountId: number,
     content: string,
     goalType: GoalType,
-    hour: number,
-    minute: number,
-    weight: string,
+    hour?: number,
+    minute?: number,
+    weight?: string,
 ) =>
     useApi(`/api/goals`, {
         method: 'POST',

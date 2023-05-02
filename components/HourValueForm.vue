@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 
+import {updateHourValueApi} from '~/apis';
+import {useAuthStore} from '~~/stores/AuthStore';
+
 const hourValue = ref<number>();
 const onInputHourValue = (params: number) => {
     hourValue.value = params;
+};
+
+const onClickCreateButton = async () => {
+    emit('onConfirm');
+
+    const {accountIdCookie} = useAuthStore();
+    await updateHourValueApi(accountIdCookie, hourValue.value ?? 0);
 };
 
 const emit = defineEmits(['onConfirm', 'onCancel']);
@@ -20,7 +30,7 @@ const emit = defineEmits(['onConfirm', 'onCancel']);
             <basic-button :theme="'ghost'" @onClick="emit('onCancel')"
                 >취소하기</basic-button
             >
-            <basic-button :theme="'primary'" @onClick="emit('onConfirm')"
+            <basic-button :theme="'primary'" @onClick="onClickCreateButton"
                 >생성하기</basic-button
             >
         </div>

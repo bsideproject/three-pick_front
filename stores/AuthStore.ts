@@ -1,7 +1,7 @@
 export const useAuthStore = defineStore('auth', () => {
     const accessToken = ref<string>('');
     const refreshToken = ref<string>('');
-    const accountId = ref<number>(0);
+    const accountId = ref<number>(1);
 
     const accessTokenCookie = useCookie<string>('accessToken');
     const refreshTokenCookie = useCookie<string>('refreshToken');
