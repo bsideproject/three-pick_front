@@ -3,6 +3,7 @@ import {ref, type PropType} from 'vue';
 
 import {createRetrospectApi, updateRetrospectApi} from '~/apis';
 import type {Retrospect} from '~/types';
+import {useAuthStore} from '~~/stores/AuthStore';
 
 const props = defineProps({
     isUpdate: {
@@ -19,20 +20,20 @@ const content = ref(props.data?.content);
 const onClickCreateButton = async () => {
     emit('onConfirm');
 
+    const {accountId} = useAuthStore();
+
     if (props.isUpdate) {
-        const {data} = await updateRetrospectApi(
-            3,
+        await updateRetrospectApi(
+            accountId,
             content.value ?? '',
             props.data?.retrospectId ?? 0,
         );
-        console.log(data.value);
     } else {
-        const {data} = await createRetrospectApi(
-            3,
+        await createRetrospectApi(
+            accountId,
             content.value ?? '',
             new Date().toISOString().substring(0, 10),
         );
-        console.log(data.value);
     }
 };
 

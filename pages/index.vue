@@ -19,17 +19,18 @@ const onCancelDayGoal = () => {
 
 const retrospectStore = useRetrospectStore();
 const {retrospect} = storeToRefs(retrospectStore);
-const isUpdate = ref(false);
+console.log(retrospect.value);
+const isUpdate = ref(retrospect.value ?? '' !== '');
 
-const authStore = useAuthStore();
 const router = useRouter();
-onMounted(() => {
-    const {accessToken} = useAuthStore();
+onMounted(async () => {
+    const {accessToken, accountId} = useAuthStore();
     if (!accessToken) {
         router.push('/login');
     }
 
-    getRetrospectApi(3, new Date().toISOString().substring(0, 10));
+    await getUserInfoApi(accountId);
+    getRetrospectApi(accountId, new Date().toISOString().substring(0, 10));
 });
 </script>
 
@@ -119,13 +120,15 @@ onMounted(() => {
                             </span>
                         </div>
                         <more-button
-                            v-if="retrospect"
+                            v-if="retrospect && retrospect.content"
                             :updateValue="'회고 수정하기'"
                             :deleteValue="'회고 삭제하기'"
                             @onUpdate="isUpdate = true"
                         />
                     </div>
-                    <template v-if="retrospect && isUpdate">
+                    <template
+                        v-if="retrospect && retrospect.content && isUpdate"
+                    >
                         <create-form-button
                             class="text-base"
                             :formType="'RetrospectForm'"
@@ -136,7 +139,7 @@ onMounted(() => {
                             + 회고 작성하기
                         </create-form-button>
                     </template>
-                    <template v-else-if="retrospect">
+                    <template v-else-if="retrospect && retrospect.content">
                         <div class="border-t border-dashed pt-2 border-gray50">
                             {{ retrospect.content }}
                         </div>

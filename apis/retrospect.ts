@@ -5,11 +5,11 @@ import {useApi} from '~~/composables';
 /**
  * 회고 생성
  */
-export const createRetrospectApi = (
+export const createRetrospectApi = async (
     accountId: number,
     content: string,
     retrospectDate: string,
-) =>
+) => {
     useApi(`/api/retrospects`, {
         method: 'POST',
         body: {
@@ -19,6 +19,8 @@ export const createRetrospectApi = (
         },
     });
 
+    getRetrospectApi(accountId, new Date().toISOString().substring(0, 10));
+};
 /**
  * 회고 수정
  */
@@ -51,5 +53,6 @@ export const getRetrospectApi = async (accountId: number, date: string) => {
     );
 
     const {setRetrospect} = useRetrospectStore();
+    console.log(data.value);
     setRetrospect(data.value ?? {content: ''});
 };
