@@ -20,17 +20,17 @@ const content = ref(props.data?.content);
 const onClickCreateButton = async () => {
     emit('onConfirm');
 
-    const {accountId} = useAuthStore();
+    const {accountIdCookie} = useAuthStore();
 
     if (props.isUpdate) {
         await updateRetrospectApi(
-            accountId,
+            accountIdCookie,
             content.value ?? '',
             props.data?.retrospectId ?? 0,
         );
     } else {
         await createRetrospectApi(
-            accountId,
+            accountIdCookie,
             content.value ?? '',
             new Date().toISOString().substring(0, 10),
         );

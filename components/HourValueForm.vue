@@ -12,8 +12,8 @@ const onInputHourValue = (params: number) => {
 const onClickCreateButton = async () => {
     emit('onConfirm');
 
-    const {accountId} = useAuthStore();
-    await updateHourValueApi(accountId, hourValue.value ?? 0);
+    const {accountIdCookie} = useAuthStore();
+    await updateHourValueApi(accountIdCookie, hourValue.value ?? 0);
 };
 
 const emit = defineEmits(['onConfirm', 'onCancel']);

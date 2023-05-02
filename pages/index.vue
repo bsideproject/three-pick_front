@@ -20,18 +20,21 @@ const onCancelDayGoal = () => {
 
 const retrospectStore = useRetrospectStore();
 const {retrospect} = storeToRefs(retrospectStore);
-const isUpdate = ref(retrospect.value ?? '' !== '');
+const isUpdate = ref(false);
 const userInfoStore = useUserInfoStore();
 const {userInfo} = storeToRefs(userInfoStore);
 const router = useRouter();
 onMounted(async () => {
-    const {accessToken, accountId} = useAuthStore();
-    if (!accessToken) {
+    const {accessTokenCookie, accountIdCookie} = useAuthStore();
+    if (!accessTokenCookie) {
         router.push('/login');
     }
 
-    getUserInfoApi(accountId);
-    getRetrospectApi(accountId, new Date().toISOString().substring(0, 10));
+    getUserInfoApi(accountIdCookie);
+    getRetrospectApi(
+        accountIdCookie,
+        new Date().toISOString().substring(0, 10),
+    );
 });
 </script>
 
