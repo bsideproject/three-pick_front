@@ -1,4 +1,4 @@
-import {useRetrospectStore} from '~/stores/retrospectStore';
+import {useRetrospectStore} from '~/stores/RetrospectStore';
 import type {Retrospect} from '~/types';
 import {useApi} from '~~/composables';
 

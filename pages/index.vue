@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {storeToRefs} from 'pinia';
 import {ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 
-import {getRetrospectApi} from '~/apis';
-import {useRetrospectStore} from '~/stores/retrospectStore';
+import {getRetrospectApi, getUserInfoApi} from '~/apis';
+import {useAuthStore} from '~/stores/AuthStore';
+import {useRetrospectStore} from '~/stores/RetrospectStore';
 
 const onClickCreateGoal = () => {
     console.log('click!!!');
@@ -18,7 +20,15 @@ const onCancelDayGoal = () => {
 const retrospectStore = useRetrospectStore();
 const {retrospect} = storeToRefs(retrospectStore);
 const isUpdate = ref(false);
+
+const authStore = useAuthStore();
+const router = useRouter();
 onMounted(() => {
+    const {accessToken} = useAuthStore();
+    if (!accessToken) {
+        router.push('/login');
+    }
+
     getRetrospectApi(3, new Date().toISOString().substring(0, 10));
 });
 </script>
