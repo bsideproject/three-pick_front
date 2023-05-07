@@ -3,15 +3,15 @@ import type {GoalType, GoalStatus} from '~/types';
 /**
  * 목표 생성
  */
-export const createGoalApi = (
+export const createGoalApi = async (
     accountId: number,
     content: string,
     goalType: GoalType,
     hour?: number,
     minute?: number,
     weight?: string,
-) =>
-    useApi(`/api/goals`, {
+) => {
+    await useApi(`/api/goals`, {
         method: 'POST',
         body: {
             accountId,
@@ -22,6 +22,9 @@ export const createGoalApi = (
             weight,
         },
     });
+
+    getUserInfoApi(accountId);
+};
 
 /**
  * 목표 수정

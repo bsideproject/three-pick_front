@@ -50,7 +50,7 @@ onMounted(async () => {
         </create-form-button>
     </template>
     <template v-else-if="retrospect && retrospect.content">
-        <div class="border-t border-dashed pt-2 border-gray50">
+        <div class="border-t border-dashed py-4 border-gray50">
             {{ retrospect.content }}
         </div>
     </template>
