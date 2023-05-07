@@ -1,4 +1,11 @@
-import type {GoalType, GoalStatus} from '~/types';
+import type {GoalType, GoalStatus, Goal} from '~/types';
+import {useGoalStore} from '~~/stores/GoalStore';
+
+interface getDayGoalRes {
+    doneValue: number;
+    missValue: number;
+    goalResponses: Array<Goal>;
+}
 
 /**
  * 목표 생성
@@ -54,19 +61,17 @@ export const updateGoalApi = (
 /**
  * 일일 목표 조회
  */
-export const getDayGoalsApi = (accountId: number) =>
-    useApi(`/api/goals/${accountId}`, {
-        method: 'GET',
-    });
+export const getDayGoalsApi = async (accountId: number, date: string) => {
+    const {data} = await useApi<getDayGoalRes>(
+        `/api/goals/${accountId}?date=${date}`,
+        {
+            method: 'GET',
+        },
+    );
 
-/**
- * 월 목표 조회
- */
-export const getMonthGoalsApi = (
-    accountId: number,
-    year: number,
-    month: number,
-) =>
-    useApi(`/api/goals/${accountId}/${year}-${month}`, {
-        method: 'GET',
-    });
+    const {setDayGoal, setDoneValue, setMissValue} = useGoalStore();
+
+    setDayGoal(data.value?.goalResponses ?? null);
+    setDoneValue(data.value?.doneValue ?? 0);
+    setMissValue(data.value?.missValue ?? 0);
+};

@@ -42,7 +42,7 @@ const goalPrice = computed(() => {
 
 const onClickCreateButton = async () => {
     emit('onConfirm');
-    const {data} = await createGoalApi(
+    await createGoalApi(
         3,
         goalTitle.value,
         GOAL_TYPE.TODAY,
@@ -50,7 +50,6 @@ const onClickCreateButton = async () => {
         goalMinute.value,
         curWeight.value,
     );
-    console.log(data.value);
 };
 
 const emit = defineEmits(['onConfirm', 'onCancel']);

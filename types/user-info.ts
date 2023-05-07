@@ -8,5 +8,5 @@ export interface UserInfo {
     modifiedDate: string;
     nickName: string;
     timeValue: number;
-    goalMonth: Goal;
+    goalMonth: Goal | null;
 }

@@ -2,7 +2,7 @@
 import {onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 
-import {getUserInfoApi} from '~/apis';
+import {getUserInfoApi, getRetrospectApi, getDayGoalsApi} from '~/apis';
 import {useAuthStore} from '~/stores/AuthStore';
 
 const router = useRouter();
@@ -12,7 +12,11 @@ onMounted(async () => {
         router.push('/login');
     }
 
+    const today = new Date().toISOString().substring(0, 10);
+
     getUserInfoApi(accountIdCookie);
+    getDayGoalsApi(accountIdCookie, today);
+    getRetrospectApi(accountIdCookie, today);
 });
 </script>
 
