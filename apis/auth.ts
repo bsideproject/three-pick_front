@@ -9,3 +9,12 @@ export const loginApi = async (email: string, password: string) => {
         },
     });
 };
+
+export const findPasswordApi = async (email: string) => {
+    return await useApi(`/api/accounts/temp-password`, {
+        method: 'POST',
+        body: {
+            email,
+        },
+    });
+};

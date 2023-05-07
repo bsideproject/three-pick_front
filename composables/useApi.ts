@@ -29,6 +29,7 @@ export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
         },
         onResponseError({request, response, options}) {
             // Handle the response errors
+            return response._data;
         },
     });
 };

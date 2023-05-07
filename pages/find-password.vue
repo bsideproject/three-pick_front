@@ -1,47 +1,57 @@
 <script lang="ts">
 import {defineComponent, computed, ref} from 'vue';
 
+import {findPasswordApi} from '~/apis';
 import ThreePickLogo from '~/assets/svg/ThreePickLogo.svg?component';
-import {baseURL} from '~/composables';
 
 // eslint-disable-next-line no-undef
 definePageMeta({
     layout: 'no-header',
 });
 
-const kakaoUrl = `${baseURL}/oauth2/authorization/kakao`;
-
 export default defineComponent({
     name: 'LoginPage',
     components: {ThreePickLogo},
     setup(props) {
+        const buttonText = ref<string>('임시 비밀번호 발급받기');
+
         const userEmailInput = ref<string>('');
+        const emailInputValidationStatus = ref<boolean>(true);
         const userInputValidation = ref<string>('');
 
-        const test = (params: string) => {
+        const onInputEmail = (params: string) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             userEmailInput.value = params;
+            emailInputValidationStatus.value =
+                emailRegex.test(params) && userEmailInput.value.length > 0;
         };
 
         const loginButtonActivated = computed(
             () =>
                 userEmailInput.value.length > 0 &&
-                !userInputValidation.value.length,
+                emailInputValidationStatus.value,
         );
 
-        const checkEmailFormat = (userInputEmail: string): void => {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            userInputValidation.value = emailRegex.test(userInputEmail)
-                ? ''
-                : 'error';
+        const onGetTempPassword = async () => {
+            const {error} = await findPasswordApi(userEmailInput.value);
+
+            if (error.value) {
+                console.error('임시 비밀번호 발급중 오류');
+                error.value.data.code === 10000 &&
+                    alert('존재하지 않는 이메일입니다.');
+            } else {
+                buttonText.value = '재전송하기';
+            }
         };
 
         return {
-            kakaoUrl,
-            test,
+            buttonText,
             userEmailInput,
+            onInputEmail,
             userInputValidation,
+            emailInputValidationStatus,
             loginButtonActivated,
-            checkEmailFormat,
+            onGetTempPassword,
         };
     },
 });
@@ -60,24 +70,19 @@ export default defineComponent({
                 v-model="userEmailInput"
                 :value="userEmailInput"
                 :required="true"
-                :validationState="userInputValidation"
+                :validationState="emailInputValidationStatus ? '' : 'error'"
                 variant="email"
-                @input.self="test"
-                @blur="checkEmailFormat"
+                @input.self="onInputEmail"
             />
             <basic-button
                 :theme="'primary'"
                 class="mt-[20px]"
                 :disabled="!loginButtonActivated"
-                >임시 비밀번호 발급받기</basic-button
+                @onClick="onGetTempPassword"
+                >{{ buttonText }}</basic-button
             >
         </div>
     </div>
 </template>
 
-<style lang="scss" scoped>
-.test {
-    border: 1px solid red;
-    width: 100%;
-}
-</style>
+<style lang="scss" scoped></style>
