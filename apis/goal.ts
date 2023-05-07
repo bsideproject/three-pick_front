@@ -31,6 +31,7 @@ export const createGoalApi = async (
     });
 
     getUserInfoApi(accountId);
+    getDayGoalsApi(accountId, new Date().toISOString().substring(0, 10));
 };
 
 /**

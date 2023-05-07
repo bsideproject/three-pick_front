@@ -25,7 +25,7 @@ const emit = defineEmits(['onUpdate', 'onDelete']);
 </script>
 
 <template>
-    <div class="relative cursor-pointer font-normal">
+    <div class="relative cursor-pointer font-normal h-6">
         <nuxt-icon
             name="main/MoreIcon"
             class="my-auto mr-2"
