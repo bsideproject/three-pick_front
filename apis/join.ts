@@ -16,7 +16,7 @@ export const joinApi = {
         );
     },
     join: async (email: string, nickname: string, password: string) => {
-        return await useApi<string>(`/api/accounts`, {
+        return (await useApi)<Record<string, string>>(`/api/accounts`, {
             method: 'POST',
             body: {
                 email,

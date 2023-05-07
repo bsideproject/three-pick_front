@@ -69,6 +69,7 @@ const onGetVerifyCode = async (retry = false) => {
 
     if (error.value) {
         console.error('이메일 인증 중 에러 발생.');
+        error.value.data.code === 10001 && alert('이미 가입된 메일입니다.');
         return;
     }
 
@@ -108,11 +109,14 @@ const onJoinThreePick = async () => {
         userPasswordInput.value,
     );
 
-    if (error) {
+    if (error.value) {
         console.error('회원가입 중 에러발생.');
     } else {
-        // 회원가입 완료시 받은 url로 리다이렉트
-        url.value && router.push(url.value);
+        const redirectUrl =
+            url.value && 'redirectUrl' in url.value
+                ? url.value.redirectUrl
+                : '/';
+        window.location.replace(redirectUrl);
     }
 };
 </script>
