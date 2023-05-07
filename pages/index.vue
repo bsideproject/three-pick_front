@@ -21,8 +21,10 @@ const onCancelDayGoal = () => {
 const retrospectStore = useRetrospectStore();
 const {retrospect} = storeToRefs(retrospectStore);
 const isUpdate = ref(false);
+
 const userInfoStore = useUserInfoStore();
 const {userInfo} = storeToRefs(userInfoStore);
+
 const router = useRouter();
 onMounted(async () => {
     const {accessTokenCookie, accountIdCookie} = useAuthStore();

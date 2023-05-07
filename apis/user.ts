@@ -1,3 +1,4 @@
+import {useApi} from '~~/composables';
 import {useUserInfoStore} from '~~/stores/UserInfoStore';
 import type {UserInfo} from '~~/types';
 

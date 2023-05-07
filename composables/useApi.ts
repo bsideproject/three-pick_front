@@ -1,4 +1,5 @@
 import type {UseFetchOptions} from 'nuxt/app';
+import {useAuthStore} from '~~/stores/AuthStore';
 
 export const baseURL = 'http://101.101.219.14:8080';
 
@@ -6,6 +7,8 @@ export const baseURL = 'http://101.101.219.14:8080';
  * https://nuxt.com/docs/api/composables/use-fetch
  */
 export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
+    const {accessTokenCookie} = useAuthStore();
+
     return useFetch(url, {
         ...options,
         baseURL: baseURL,
@@ -17,7 +20,7 @@ export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
             // Set the request headers
             options.headers = {
                 ...options.headers,
-                Authorization: `Bearer ${'myToken'}`,
+                Authorization: `Bearer ${accessTokenCookie}`,
             };
         },
         onRequestError({request, options, error}) {
