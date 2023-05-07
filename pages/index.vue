@@ -26,16 +26,16 @@ onMounted(async () => {
                 <span class="font-bold">2023년 4월 9일</span>
             </div>
         </div>
-        <div class="w-full flex justify-center mt-5">
+        <div class="w-full flex justify-center mt-5 mb-11">
             <div
                 class="max-w-[988px] flex-1 flex flex-row justify-center gap-5"
             >
-                <div class="w-1/3 flex flex-col">
+                <div class="w-2/5 flex flex-col">
                     <month-goal />
                     <hour-value />
                 </div>
 
-                <div class="w-2/3 flex flex-col shadow-md rounded px-8 py-9">
+                <div class="w-3/5 flex flex-col shadow-md rounded px-8 py-9">
                     <day-goal />
                     <retrospect />
                 </div>
