@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import {storeToRefs} from 'pinia';
-import {ref} from 'vue';
+import {ref, onMounted} from 'vue';
 
+import {getRetrospectApi} from '~/apis';
+import {useAuthStore} from '~/stores/AuthStore';
 import {useRetrospectStore} from '~/stores/RetrospectStore';
 
 const retrospectStore = useRetrospectStore();
 const {retrospect} = storeToRefs(retrospectStore);
 const isUpdate = ref(false);
+
+onMounted(async () => {
+    const {accountIdCookie} = useAuthStore();
+
+    getRetrospectApi(
+        accountIdCookie,
+        new Date().toISOString().substring(0, 10),
+    );
+});
 </script>
 
 <template>
