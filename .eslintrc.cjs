@@ -68,7 +68,14 @@ module.exports = {
         'vue/multi-word-component-names': [
             'error',
             {
-                ignores: ['default', 'index', 'Header', 'login', 'join'],
+                ignores: [
+                    'default',
+                    'index',
+                    'Header',
+                    'login',
+                    'join',
+                    'Retrospect',
+                ],
             },
         ],
         'vue/no-multiple-template-root': 'off',
