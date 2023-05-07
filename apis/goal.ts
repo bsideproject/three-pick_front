@@ -1,4 +1,4 @@
-import type {GoalType, GoalStatus, Goal} from '~/types';
+import type {GoalType, Goal} from '~/types';
 import {useGoalStore} from '~~/stores/GoalStore';
 
 interface getDayGoalRes {
@@ -6,6 +6,8 @@ interface getDayGoalRes {
     missValue: number;
     goalResponses: Array<Goal>;
 }
+
+const today = new Date().toISOString().substring(0, 10);
 
 /**
  * 목표 생성
@@ -31,33 +33,28 @@ export const createGoalApi = async (
     });
 
     getUserInfoApi(accountId);
-    getDayGoalsApi(accountId, new Date().toISOString().substring(0, 10));
+    getDayGoalsApi(accountId, today);
 };
 
 /**
  * 목표 수정
  */
-export const updateGoalApi = (
-    accountId: number,
-    content: string,
-    goalId: number,
-    goalStatus: GoalStatus,
-    hour: number,
-    minute: number,
-    weight: string,
-) =>
-    useApi(`/api/goals`, {
+export const updateGoalApi = async (accountId: number, goal: Goal) => {
+    await useApi(`/api/goals`, {
         method: 'PUT',
         body: {
             accountId,
-            content,
-            goalId,
-            goalStatus,
-            hour,
-            minute,
-            weight,
+            content: goal.content,
+            goalId: goal.goalId,
+            goalStatus: goal.goalStatus,
+            hour: goal.hour,
+            minute: goal.minute,
+            weight: goal.weight,
         },
     });
+
+    getDayGoalsApi(accountId, today);
+};
 
 /**
  * 일일 목표 조회
