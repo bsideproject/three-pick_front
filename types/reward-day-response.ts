@@ -1,9 +1,9 @@
-import type {GoalResponse} from './goal-response';
+import type {Goal} from './goal';
 
 export interface RewardDayResponse {
     accountId: number;
     doneValue: number;
-    goalResponse: Array<GoalResponse>;
+    goalResponse: Array<Goal>;
     imageUrl: string;
     missValue: string;
     timeValue: string;

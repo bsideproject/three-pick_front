@@ -9,13 +9,29 @@ import {useRetrospectStore} from '~/stores/RetrospectStore';
 import {useUserInfoStore} from '~~/stores/UserInfoStore';
 
 import {dateTransformer, dateForData} from '~/utils';
-import {DatePicker} from 'v-calendar';
+import {Calendar} from 'v-calendar';
 import 'v-calendar/style.css';
 
 const date = ref(new Date());
 
 const selectedDate = computed(() => dateTransformer(date.value));
 const selectedDateForData = computed(() => dateForData(date.value));
+
+const attrs = ref([
+    {
+        key: 'today',
+        content: '',
+        highlight: {
+            fillMode: 'outline',
+        },
+        dates: date,
+    },
+]);
+
+const changeSelectedDate = (day: any) => {
+    console.log(day);
+    date.value = day.date;
+};
 </script>
 
 <template>
@@ -29,7 +45,18 @@ const selectedDateForData = computed(() => dateForData(date.value));
     <div class="w-full flex justify-center mt-5 mb-11">
         <div class="max-w-[988px] flex-1 flex flex-row justify-center gap-5">
             <div class="w-4/6 flex shadow-md flex-col rounded px-8 py-9">
-                <DatePicker v-model="date" borderless transparent expanded />
+                <Calendar
+                    v-model="date"
+                    :attributes="attrs"
+                    expanded
+                    @dayclick="changeSelectedDate"
+                >
+                    <!-- <template #day-content="{date}">
+                        <div class="custom-day-cell">
+
+                        </div>
+                    </template> -->
+                </Calendar>
             </div>
             <div
                 class="w-2/6 flex flex-col items-center shadow-md rounded py-10"
@@ -41,9 +68,6 @@ const selectedDateForData = computed(() => dateForData(date.value));
     </div>
 </template>
 <style>
-.vc-container {
-}
-
 .vc-header {
     margin-bottom: 1.4rem;
 }
@@ -53,10 +77,12 @@ const selectedDateForData = computed(() => dateForData(date.value));
     padding-bottom: 1.4rem;
 }
 
+/** 일요일 */
 .vc-weekday-1 {
     color: #ff5416;
 }
 
+/** 토요일 */
 .vc-weekday-7 {
     color: #9a7eff;
 }
@@ -66,15 +92,15 @@ const selectedDateForData = computed(() => dateForData(date.value));
 }
 
 .vc-highlights {
-    border: 2px solid #5d31fe;
-    background-color: #ede8ff;
+    /* border: 2px solid #5d31fe;
+    background-color: #ede8ff; */
 }
 
 .vc-highlight.vc-highlight-bg-solid {
-    display: none;
+    /* display: none; */
 }
 
 .vc-focus {
-    color: black;
+    /* color: black; */
 }
 </style>
