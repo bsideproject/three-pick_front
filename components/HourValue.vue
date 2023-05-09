@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import {storeToRefs} from 'pinia';
 
+import {useGoalStore} from '~~/stores/GoalStore';
 import {useUserInfoStore} from '~~/stores/UserInfoStore';
 
 const userInfoStore = useUserInfoStore();
 const {userInfo} = storeToRefs(userInfoStore);
+
+const goalStore = useGoalStore();
+const {doneValue, missValue} = storeToRefs(goalStore);
 </script>
 
 <template>
@@ -46,13 +50,13 @@ const {userInfo} = storeToRefs(userInfoStore);
                         <div class="flex flex-col">
                             <div class="text-sm">달성 금액</div>
                             <div class="text-2xl font-bold mt-4">
-                                2,400,000원
+                                {{ doneValue }}원
                             </div>
                         </div>
                         <div class="flex flex-col mt-8">
                             <div class="text-sm">달성 예정 금액</div>
                             <div class="text-2xl text-orange font-bold mt-4">
-                                2,400,000원
+                                {{ missValue }}원
                             </div>
                         </div>
                     </div>

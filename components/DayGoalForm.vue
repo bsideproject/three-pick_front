@@ -4,6 +4,7 @@ import {ref, computed} from 'vue';
 import {createGoalApi} from '~/apis';
 import {GOAL_TYPE, WEIGHT_LEVEL} from '~/types';
 import type {WeightLevel} from '~/types';
+import {useAuthStore} from '~~/stores/AuthStore';
 
 const hourPrice = ref(1000); // TODO
 
@@ -42,15 +43,17 @@ const goalPrice = computed(() => {
 
 const onClickCreateButton = async () => {
     emit('onConfirm');
-    const {data} = await createGoalApi(
-        3,
+
+    const {accountIdCookie} = useAuthStore();
+
+    await createGoalApi(
+        accountIdCookie,
         goalTitle.value,
         GOAL_TYPE.TODAY,
         goalHour.value,
         goalMinute.value,
         curWeight.value,
     );
-    console.log(data.value);
 };
 
 const emit = defineEmits(['onConfirm', 'onCancel']);
