@@ -25,7 +25,7 @@ const emit = defineEmits(['onUpdate', 'onDelete']);
 </script>
 
 <template>
-    <div class="relative">
+    <div class="relative cursor-pointer font-normal h-6">
         <nuxt-icon
             name="main/MoreIcon"
             class="my-auto mr-2"
@@ -33,7 +33,7 @@ const emit = defineEmits(['onUpdate', 'onDelete']);
         />
         <div
             v-if="isOpen"
-            class="absolute top-0 right-[-116px] flex-none w-max z-50 flex flex-col text-base shadow-md bg-white cursor-pointer"
+            class="absolute top-0 right-[-116px] flex-none w-max z-50 flex flex-col text-base shadow-md bg-white"
         >
             <span class="p-4" @click="onClickUpdateButton">{{
                 updateValue

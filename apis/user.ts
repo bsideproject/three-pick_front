@@ -39,6 +39,7 @@ export const getUserInfoApi = async (accountId: number) => {
             modifiedDate: '',
             nickName: '',
             timeValue: 0,
+            goalMonth: null,
         },
     );
 };

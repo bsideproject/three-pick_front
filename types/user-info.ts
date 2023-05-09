@@ -1,3 +1,4 @@
+import type {Goal} from './goal';
 export interface UserInfo {
     changeCount: number;
     coachMark: boolean;
@@ -7,4 +8,5 @@ export interface UserInfo {
     modifiedDate: string;
     nickName: string;
     timeValue: number;
+    goalMonth: Goal | null;
 }

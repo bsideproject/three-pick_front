@@ -3,23 +3,25 @@ import {ref} from 'vue';
 
 import {createGoalApi} from '~/apis';
 import {GOAL_TYPE} from '~/types';
+import {useAuthStore} from '~~/stores/AuthStore';
 
 const goalTitle = ref('');
 const onInputGoalTitle = (params: string) => {
     goalTitle.value = params;
 };
 
+const {accountIdCookie} = useAuthStore();
+
 const onClickCreateButton = async () => {
     emit('onConfirm');
-    const {data} = await createGoalApi(
-        3,
+    await createGoalApi(
+        accountIdCookie,
         goalTitle.value,
         GOAL_TYPE.MONTH,
         1,
         1,
         '0.5',
     );
-    console.log(data.value);
 };
 
 const emit = defineEmits(['onConfirm', 'onCancel']);
