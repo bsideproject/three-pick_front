@@ -20,15 +20,22 @@ const onCancelDayGoal = () => {
 const goalStore = useGoalStore();
 const {dayGoal} = storeToRefs(goalStore);
 
+const curGoal = ref();
+const onClickCheckIcon = (goal: Goal) => {
+    isModalOpen.value = true;
+    curGoal.value = goal;
+};
+
 const {accountIdCookie} = useAuthStore();
 
 const isModalOpen = ref(false);
-const onClickGoalCompleted = (goal: Goal) => {
+const onClickGoalCompleted = () => {
     const completedGoal = {
-        ...goal,
+        ...curGoal.value,
         goalStatus: GOAL_STATUS.DONE,
     };
     updateGoalApi(accountIdCookie, completedGoal);
+    isModalOpen.value = false;
 };
 </script>
 
@@ -59,7 +66,7 @@ const onClickGoalCompleted = (goal: Goal) => {
                     name="main/CheckIcon"
                     filled
                     class="my-auto mr-4 cursor-pointer"
-                    @click="isModalOpen = true"
+                    @click="onClickCheckIcon(goal)"
                 />
                 <div class="text-base flex flex-col font-bold flex-1">
                     {{ goal.content }}
@@ -88,11 +95,7 @@ const onClickGoalCompleted = (goal: Goal) => {
         {{ `+ ${dayGoal.length + 1}번째 목표 생성하기` }}
     </create-form-button>
 
-    <modal
-        v-if="isModalOpen"
-        @onComplete="onClickGoalCompleted"
-        @onCancel="isModalOpen = false"
-    >
+    <modal v-if="isModalOpen">
         <template #header> 목표 달성을 축하드려요! </template>
         <template #content>
             <div class="text-center text-sm">정말로 목표를 완료하시겠어요?</div>
@@ -101,10 +104,10 @@ const onClickGoalCompleted = (goal: Goal) => {
             </div>
         </template>
         <template #footer>
-            <basic-button :theme="'ghost'" @click="emit('onCancel')"
+            <basic-button :theme="'ghost'" @click="isModalOpen = false"
                 >취소하기</basic-button
             >
-            <basic-button :theme="'primary'" @click="emit('onComplete')"
+            <basic-button :theme="'primary'" @click="onClickGoalCompleted()"
                 >목표 완료하기</basic-button
             >
         </template>

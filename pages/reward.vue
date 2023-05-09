@@ -9,8 +9,8 @@ import {useRetrospectStore} from '~/stores/RetrospectStore';
 import {useUserInfoStore} from '~~/stores/UserInfoStore';
 
 import {dateTransformer, dateForData} from '~/utils';
-// import {DatePicker} from 'v-calendar';
-// import 'v-calendar/style.css';
+import {DatePicker} from 'v-calendar';
+import 'v-calendar/style.css';
 
 const date = ref(new Date());
 
@@ -30,7 +30,6 @@ const selectedDateForData = computed(() => dateForData(date.value));
         <div class="max-w-[988px] flex-1 flex flex-row justify-center gap-5">
             <div class="w-4/6 flex shadow-md flex-col rounded px-8 py-9">
                 <DatePicker v-model="date" borderless transparent expanded />
-                <!-- </DatePicker> -->
             </div>
             <div
                 class="w-2/6 flex flex-col items-center shadow-md rounded py-10"
