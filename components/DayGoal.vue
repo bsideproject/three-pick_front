@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {ref} from 'vue';
 import {storeToRefs} from 'pinia';
 
 import {updateGoalApi} from '~/apis';
@@ -21,6 +22,7 @@ const {dayGoal} = storeToRefs(goalStore);
 
 const {accountIdCookie} = useAuthStore();
 
+const isModalOpen = ref(false);
 const onClickGoalCompleted = (goal: Goal) => {
     const completedGoal = {
         ...goal,
@@ -57,7 +59,7 @@ const onClickGoalCompleted = (goal: Goal) => {
                     name="main/CheckIcon"
                     filled
                     class="my-auto mr-4 cursor-pointer"
-                    @click="onClickGoalCompleted(goal)"
+                    @click="isModalOpen = true"
                 />
                 <div class="text-base flex flex-col font-bold flex-1">
                     {{ goal.content }}
@@ -83,6 +85,28 @@ const onClickGoalCompleted = (goal: Goal) => {
         @onConfirm="onConfirmDayGoal"
         @onCancel="onCancelDayGoal"
     >
-        + 첫 번째 목표 생성하기
+        {{ `+ ${dayGoal.length + 1}번째 목표 생성하기` }}
     </create-form-button>
+
+    <modal
+        v-if="isModalOpen"
+        @onComplete="onClickGoalCompleted"
+        @onCancel="isModalOpen = false"
+    >
+        <template #header> 목표 달성을 축하드려요! </template>
+        <template #content>
+            <div class="text-center text-sm">정말로 목표를 완료하시겠어요?</div>
+            <div class="text-center text-sm">
+                (목표를 완료하면 수정이나 삭제가 불가능해요)
+            </div>
+        </template>
+        <template #footer>
+            <basic-button :theme="'ghost'" @click="emit('onCancel')"
+                >취소하기</basic-button
+            >
+            <basic-button :theme="'primary'" @click="emit('onComplete')"
+                >목표 완료하기</basic-button
+            >
+        </template>
+    </modal>
 </template>

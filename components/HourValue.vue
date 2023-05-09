@@ -8,7 +8,7 @@ const userInfoStore = useUserInfoStore();
 const {userInfo} = storeToRefs(userInfoStore);
 
 const goalStore = useGoalStore();
-const {doneValue, missValue} = storeToRefs(goalStore);
+const {doneValue, missValue, imageUrl} = storeToRefs(goalStore);
 </script>
 
 <template>
@@ -41,7 +41,8 @@ const {doneValue, missValue} = storeToRefs(goalStore);
                     class="border-y border-dashed border-gray50 py-[63.46px] mt-[27.47px] flex"
                 >
                     <div class="flex flex-col flex-1 items-center">
-                        <div class="text-[95px]">🥐</div>
+                        <!-- <div class="text-[95px]">🥐</div> -->
+                        <img :src="imageUrl" />
                         <div class="text-base font-bold">
                             스테이크만큼 벌었어요!
                         </div>
