@@ -5,6 +5,7 @@ interface getDayGoalRes {
     doneValue: number;
     missValue: number;
     goalResponses: Array<Goal>;
+    imageUrl: string;
 }
 
 const today = new Date().toISOString().substring(0, 10);
@@ -67,9 +68,11 @@ export const getDayGoalsApi = async (accountId: number, date: string) => {
         },
     );
 
-    const {setDayGoal, setDoneValue, setMissValue} = useGoalStore();
+    const {setDayGoal, setDoneValue, setMissValue, setImageUrl} =
+        useGoalStore();
 
     setDayGoal(data.value?.goalResponses ?? null);
     setDoneValue(data.value?.doneValue ?? 0);
     setMissValue(data.value?.missValue ?? 0);
+    setImageUrl(data.value?.imageUrl ?? '');
 };

@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
 import {onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 
 import {getUserInfoApi, getRetrospectApi, getDayGoalsApi} from '~/apis';
 import {useAuthStore} from '~/stores/AuthStore';
+import {useUserInfoStore} from '~~/stores/UserInfoStore';
+import {dateTransformer} from '~/utils';
 
 const router = useRouter();
+
+const userInfoStore = useUserInfoStore();
+const {userInfo} = storeToRefs(userInfoStore);
+
 onMounted(async () => {
     const {accessTokenCookie, accountIdCookie} = useAuthStore();
     if (!accessTokenCookie) {
@@ -26,8 +33,10 @@ onMounted(async () => {
             <div
                 class="max-w-[988px] flex-1 flex flex-row justify-between py-10 text-2xl"
             >
-                <span class="font-bold"> 안녕하세요, 노하우님! </span>
-                <span class="font-bold">2023년 4월 9일</span>
+                <span class="font-bold"
+                    >{{ `안녕하세요, ${userInfo && userInfo.nickName}님!` }}
+                </span>
+                <span class="font-bold">{{ dateTransformer(new Date()) }}</span>
             </div>
         </div>
         <div class="w-full flex justify-center mt-5 mb-11">

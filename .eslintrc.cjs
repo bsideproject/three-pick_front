@@ -76,6 +76,7 @@ module.exports = {
                     'join',
                     'Retrospect',
                     'reward',
+                    'Modal',
                 ],
             },
         ],
