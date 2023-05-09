@@ -75,6 +75,7 @@ module.exports = {
                     'login',
                     'join',
                     'Retrospect',
+                    'reward',
                 ],
             },
         ],

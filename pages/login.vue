@@ -43,6 +43,7 @@ const onClickLogin = async () => {
 
     if (error.value) {
         console.error('로그인중 에러 발생');
+        error.value.data.code === 10000 && alert('존재하지 않는 계정입니다.');
     } else {
         data.value?.accessToken && setAccessToken(data.value?.accessToken);
         data.value?.refreshToken && setRefreshToken(data.value?.refreshToken);
