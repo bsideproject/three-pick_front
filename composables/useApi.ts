@@ -1,4 +1,7 @@
+import jwtDecode from 'jwt-decode';
 import type {UseFetchOptions} from 'nuxt/app';
+
+import {verifyRefreshToken} from '~~/apis';
 import {useAuthStore} from '~~/stores/AuthStore';
 
 export const baseURL = 'http://101.101.219.14:8080';
@@ -6,8 +9,26 @@ export const baseURL = 'http://101.101.219.14:8080';
 /** useFetch
  * https://nuxt.com/docs/api/composables/use-fetch
  */
-export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
-    const {accessTokenCookie} = useAuthStore();
+export const useApi = async <T>(url: string, options: UseFetchOptions<T>) => {
+    const {
+        accessTokenCookie,
+        refreshTokenCookie,
+        setAccessToken,
+        setRefreshToken,
+        setAccountId,
+    } = useAuthStore();
+
+    if (accessTokenCookie && isAccessTokenExpired(accessTokenCookie)) {
+        console.info('AccessToken 만료.');
+        const response = await verifyRefreshToken(refreshTokenCookie);
+        const data = await response.json();
+
+        if (data) {
+            setAccessToken(data.accessToken);
+            setRefreshToken(data.refreshToken);
+            setAccountId(data.accountId);
+        }
+    }
 
     return useFetch(url, {
         ...options,
@@ -35,4 +56,16 @@ export const useApi = <T>(url: string, options: UseFetchOptions<T>) => {
             return response._data;
         },
     });
+};
+
+const isAccessTokenExpired = (accessToken: string) => {
+    const decodedToken: {exp?: number} = jwtDecode(accessToken);
+
+    if (!decodedToken.exp) {
+        return true;
+    }
+
+    const currentTime: number = Math.floor(Date.now() / 1000);
+
+    return currentTime > decodedToken.exp;
 };

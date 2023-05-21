@@ -28,9 +28,10 @@ const attrs = ref([
     },
 ]);
 
-const changeSelectedDate = (day: any) => {
-    console.log(day);
-    date.value = day.date;
+const onGetRewardInfoByDate = (selectedDate: any) => {
+    console.log(selectedDate);
+    console.log(selectedDate.id);
+    date.value = selectedDate.date;
 };
 </script>
 
@@ -45,17 +46,15 @@ const changeSelectedDate = (day: any) => {
     <div class="w-full flex justify-center mt-5 mb-11">
         <div class="max-w-[988px] flex-1 flex flex-row justify-center gap-5">
             <div class="w-4/6 flex shadow-md flex-col rounded px-8 py-9">
-                <Calendar
-                    v-model="date"
-                    :attributes="attrs"
-                    expanded
-                    @dayclick="changeSelectedDate"
-                >
-                    <!-- <template #day-content="{date}">
-                        <div class="custom-day-cell">
-
-                        </div>
-                    </template> -->
+                <Calendar v-model="date" :attributes="attrs" expanded>
+                    <!-- @dayclick="changeSelectedDate" -->
+                    <template #day-content="{day}">
+                        <span
+                            class="flex justify-center cursor-pointer"
+                            @click="onGetRewardInfoByDate(day)"
+                            >{{ day.day }}</span
+                        >
+                    </template>
                 </Calendar>
             </div>
             <div
@@ -78,26 +77,34 @@ const changeSelectedDate = (day: any) => {
 }
 
 /** 일요일 */
-.vc-weekday-1 {
+.vc-weekday-1,
+.weekday-1 {
     color: #ff5416;
 }
 
 /** 토요일 */
-.vc-weekday-7 {
+.vc-weekday-7,
+.weekday-7 {
     color: #9a7eff;
 }
 
 .vc-day {
     padding-bottom: 50px;
+    height: 118px;
+    width: 83px;
 }
 
 .vc-highlights {
-    /* border: 2px solid #5d31fe;
-    background-color: #ede8ff; */
+    border: 2px solid #5d31fe;
+    background-color: #ede8ff;
 }
 
 .vc-highlight.vc-highlight-bg-solid {
     /* display: none; */
+}
+
+.vc-highlight.vc-highlight-bg-outline {
+    display: none;
 }
 
 .vc-focus {
