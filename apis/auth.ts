@@ -18,3 +18,11 @@ export const findPasswordApi = async (email: string) => {
         },
     });
 };
+
+export const verifyRefreshToken = async (refreshToken: string) => {
+    return await fetch(`${baseURL}/api/tokens/refresh`, {
+        headers: {
+            Refresh: refreshToken,
+        },
+    });
+};
