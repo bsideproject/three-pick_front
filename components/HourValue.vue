@@ -12,7 +12,7 @@ const {doneValue, missValue, imageUrl} = storeToRefs(goalStore);
 </script>
 
 <template>
-    <div class="w-full flex flex-col shadow-md rounded mt-5">
+    <div class="w-full flex flex-col shadow-md rounded mt-5 bg-white">
         <div class="w-full h-50 flex flex-col px-8 py-9">
             <span class="font-bold text-xl pb-2 flex">
                 <div class="flex-1 flex">

@@ -29,7 +29,7 @@ onMounted(async () => {
 
 <template>
     <div>
-        <div class="w-full flex justify-center shadow-md sm:px-4">
+        <div class="w-full flex justify-center shadow-md sm:px-4 bg-white">
             <div
                 class="max-w-[988px] flex-1 flex flex-row justify-between py-10 text-2xl"
             >
@@ -48,7 +48,9 @@ onMounted(async () => {
                     <hour-value />
                 </div>
 
-                <div class="w-3/5 flex flex-col shadow-md rounded px-8 py-9">
+                <div
+                    class="w-3/5 flex flex-col shadow-md rounded px-8 py-9 bg-white"
+                >
                     <day-goal />
                     <retrospect />
                 </div>

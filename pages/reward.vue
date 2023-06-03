@@ -36,7 +36,7 @@ const onGetRewardInfoByDate = (selectedDate: any) => {
 <template>
     <section class="w-full flex justify-center sm:px-4">
         <div
-            class="max-w-[988px] flex-1 py-6 px-8 text-2xl border-2 rounded flex"
+            class="mt-5 max-w-[988px] flex-1 py-6 px-8 text-2xl rounded flex bg-white"
         >
             <section class="grid grid-flow-col gap-16">
                 <div class="flex items-center">
@@ -62,9 +62,13 @@ const onGetRewardInfoByDate = (selectedDate: any) => {
             </section>
         </div>
     </section>
-    <div class="w-full flex justify-center mt-5 mb-11">
-        <div class="max-w-[988px] flex-1 flex flex-row justify-center gap-5">
-            <div class="w-4/6 flex shadow-md flex-col rounded px-8 py-9">
+    <div class="w-full flex justify-center mt-5">
+        <div
+            class="max-w-[988px] flex-1 flex flex-row justify-center gap-5 rounded"
+        >
+            <div
+                class="w-4/6 flex shadow-md flex-col rounded px-8 py-9 bg-white"
+            >
                 <Calendar
                     v-model="date"
                     :attributes="attrs"
@@ -82,7 +86,7 @@ const onGetRewardInfoByDate = (selectedDate: any) => {
                 </Calendar>
             </div>
             <div
-                class="w-2/6 flex flex-col items-center shadow-md rounded py-10"
+                class="w-2/6 flex flex-col items-center shadow-md rounded py-10 bg-white"
             >
                 <h3>{{ selectedDate }}</h3>
                 <day-reward :selectedDate="selectedDateForData" />

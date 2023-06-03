@@ -8,7 +8,7 @@ const {userInfo} = storeToRefs(userInfoStore);
 </script>
 
 <template>
-    <div class="w-full flex flex-col shadow-md rounded h-max">
+    <div class="w-full flex flex-col shadow-md rounded h-max bg-white">
         <div class="w-full flex flex-col px-8 py-9">
             <span class="font-bold text-xl pb-2 flex">
                 <div class="flex-col flex-1">
