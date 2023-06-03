@@ -21,9 +21,7 @@ const attrs = ref([
     {
         key: 'today',
         content: '',
-        highlight: {
-            fillMode: 'outline',
-        },
+        highlight: {},
         dates: date,
     },
 ]);
@@ -38,15 +36,41 @@ const onGetRewardInfoByDate = (selectedDate: any) => {
 <template>
     <section class="w-full flex justify-center sm:px-4">
         <div
-            class="max-w-[988px] flex-1 flex flex-row justify-between py-10 text-2xl border-2 rounded"
+            class="max-w-[988px] flex-1 py-6 px-8 text-2xl border-2 rounded flex"
         >
-            <span class="font-bold"> 리워드 페이지 </span>
+            <section class="grid grid-flow-col gap-16">
+                <div class="flex items-center">
+                    <span class="text-base mr-3">쓰리픽 성공</span>
+                    <span class="text-2xl font-bold">30회</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-base mr-3">투자 시간</span>
+                    <span class="text-2xl font-bold">30시간 50분</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-base mr-3">달성 금액</span>
+                    <span class="text-2xl font-bold text-purple7"
+                        >10,000,000원</span
+                    >
+                </div>
+                <div class="flex items-center">
+                    <span class="text-base mr-3">놓친 금액</span>
+                    <span class="text-2xl font-bold text-orange"
+                        >10,000,000원</span
+                    >
+                </div>
+            </section>
         </div>
     </section>
     <div class="w-full flex justify-center mt-5 mb-11">
         <div class="max-w-[988px] flex-1 flex flex-row justify-center gap-5">
             <div class="w-4/6 flex shadow-md flex-col rounded px-8 py-9">
-                <Calendar v-model="date" :attributes="attrs" expanded>
+                <Calendar
+                    v-model="date"
+                    :attributes="attrs"
+                    expanded
+                    borderless
+                >
                     <!-- @dayclick="changeSelectedDate" -->
                     <template #day-content="{day}">
                         <span
@@ -100,14 +124,14 @@ const onGetRewardInfoByDate = (selectedDate: any) => {
 }
 
 .vc-highlight.vc-highlight-bg-solid {
-    /* display: none; */
+    display: none;
 }
 
 .vc-highlight.vc-highlight-bg-outline {
     display: none;
 }
 
-.vc-focus {
-    /* color: black; */
+.in-next-month.is-not-in-month {
+    display: none;
 }
 </style>
